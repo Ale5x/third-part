@@ -4,24 +4,17 @@ import RegistartionForm from './componets/RegistrationForm';
 
 
 function App() {
-console.log("Registration form");
 const [users, setUser] = useState({email: ""})
 const [error, setError] = useState("");
 
-console.log("1");
 
 const Registration = user => {
     console.log(user);
-    console.log("Starting Registration");
+  
 
-    if(user.password === user.repeatPassword) {
-      console.log("Password equalss")
-      user.email = "Password equalss";
-      
-    } else {
-      setError("Password dont match");
-      user.email = "Password dont match";
-    }
+    setUser({
+      email: user.email
+    })
   }
 
   const Logout = () => {
@@ -29,13 +22,11 @@ const Registration = user => {
 
   }
 
-  console.log("App finishing");
-
   return (
     
     <div className="App">
       
-    {(users.email == true) ? (
+    {(users.email != "") ? (
       <div className='welcome'>
         <h2>Welcome, Registartion SuccessFull</h2>
         <button onClick={Logout}>Logout</button>

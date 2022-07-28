@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import '../index.css';
 
 function RegistartionForm({Registration}) {
   const [user, setUser] = useState({email: "", firstName: "", secondName: "", password: "", repeatPassword: ""});
@@ -14,30 +15,24 @@ function RegistartionForm({Registration}) {
   const [formValid, setFormValid] = useState(false);
 
   useEffect( () => {
-    if(placeholderStatus.emailStatus && placeholderStatus.firstNameStatus && placeholderStatus.secondNameStatus && 
-        placeholderStatus.passwordStatus && placeholderStatus.repeatPasswordStatus) {
+    if(user.email != "" && user.firstName != "" && user.secondName != "" && 
+    user.password != "" && user.repeatPassword != "" && user.password === user.repeatPassword) {
             setFormValid(true);
     } else {
         checkPassword();
-        console.log("PASSSWORD 3")
         setFormValid(false);
     }
   }, [error.emailError, error.firstNameError, error.secondNameError, error.passwordError, error.repeatPasswordError])
 
   function checkPassword() {
     if(user.password === user.repeatPassword) {
-        console.log("PASSSWORD")
         setFormValid(true);
     } else {
-        console.log("PASSSWORD 2")
         placeholderStatus.repeatPasswordStatus = false;
         setError({repeatPasswordError: "Passwords do not match"});
         setFormValid(false);
     }
   }
-  
-
-  console.log("Valid form",formValid)
 
   const emailHandler = (e) => {
     const REGEX_EMAIL = "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}\\b";
@@ -68,16 +63,17 @@ function RegistartionForm({Registration}) {
   }
 
   const paswwordHandler = (e) => {
+    console.log("status", placeholderStatus.passwordStatus)
     if(e.target.value !== "") {
         setError({passwordError: ""});
         user.password = e.target.value;
     } else {
+      console.log("setError")
         setError({passwordError: "Password cannot be empty"});
     }
   }
 
   const repeatPasswordHandler = (e) => {
-    console.log("repeatPasswordHandler")
 
     if(e.target.value !== "" && user.password === e.target.value) {
         setError({repeatPasswordError: ""});
@@ -86,7 +82,6 @@ function RegistartionForm({Registration}) {
         setError({repeatPasswordError: "Passwords do not match"});
     }
   }
-  console.log("STAUSES", placeholderStatus)
 
   const bluerHubdler = (e) => {
     switch(e.target.name) {
@@ -114,32 +109,33 @@ function RegistartionForm({Registration}) {
     Registration(user);
 }
 
-  return (
+
+return (
     <form onSubmit={submitHandler}>
-        <div>
-          <h1>Registration</h1>
-          <div>
-            {(placeholderStatus.emailStatus && error.emailError) && <div style={{color:'red'}}>{error.emailError}</div>} 
+        <div className="form-inner">
+          <h2>Registration</h2>
+          {(placeholderStatus.emailStatus && error.emailError) && <div className='error_message'>{error.emailError}</div>}
+          <div className="form-group">
             <label htmlFor='email'>Email:</label>
-            <input  onChange={e => emailHandler(e)} onBlur={e => bluerHubdler(e)} type="text" name="email" id='email' placeholder='Enter email'/>
+            <input onChange={e => emailHandler(e)} onBlur={e => bluerHubdler(e)} type="email" name="email" id='email' placeholder='Enter email'/>
           </div>
-          <div>
-            {(placeholderStatus.firstNameStatus && error.firstNameError) && <div style={{color:'red'}}>{error.firstNameError}</div>}
+          {(placeholderStatus.firstNameStatus && error.firstNameError) && <div className='error_message'>{error.firstNameError}</div>}
+          <div className="form-group">
             <label htmlFor='first-name'>First name:</label>
             <input onChange={e => firstNameHandler(e)}  onBlur={e => bluerHubdler(e)} type="text" name="first-name" id='first-name' placeholder='Enter first name'/>
           </div>
-          <div>
-            {(placeholderStatus.secondNameStatus && error.secondNameError) && <div style={{color:'red'}}>{error.secondNameError}</div>}
+          {(placeholderStatus.secondNameStatus && error.secondNameError) && <div className='error_message'>{error.secondNameError}</div>}
+          <div className="form-group">
             <label htmlFor='second-name'>Second name:</label>
             <input onChange={e => secondNameHandler(e)} onBlur={e => bluerHubdler(e)} type="text" name="second-name" id='second-name' placeholder='Enter second name'/>
           </div>
-          <div>
-            {(placeholderStatus.passwordStatus && error.passwordError) && <div style={{color:'red'}}>{error.passwordError}</div>}
+          {(placeholderStatus.passwordStatus && error.passwordError) && <div className='error_message'>{error.passwordError}</div>}
+          <div className="form-group">
             <label htmlFor='password'>Password:</label>
             <input onChange={e => paswwordHandler(e)} onBlur={e => bluerHubdler(e)} type="password" name="password" id='password' placeholder='Enter password'/>
           </div>
-          <div>
-            {(placeholderStatus.repeatPasswordStatus && error.passwordError) && <div style={{color:'red'}}>{error.repeatPasswordError}</div>}
+          <div className="form-group">
+          {(placeholderStatus.repeatPasswordStatus && error.repeatPasswordError) && <div className='error_message'>{error.repeatPasswordError}</div>}
             <label htmlFor='repeat-password'>Repeat Password:</label>
             <input onChange={e => repeatPasswordHandler(e)} onBlur={e => bluerHubdler(e)} type="password" name="repeat-password" id='repeat-password' placeholder='Repeat password'/>
           </div>
@@ -149,5 +145,43 @@ function RegistartionForm({Registration}) {
   );
 };
 
-export default RegistartionForm;
 
+
+/*
+
+  return (
+    <form onSubmit={submitHandler}>
+        <div className="form-inner">
+          <h2>Registration</h2>
+          {(error.emailError === "") ? (<div className="error_message">{error.emailError}</div>) : ""}
+          <div className="form-group">
+            <label htmlFor='email'>Email:</label>
+            <input onChange={e => setUser({...user, email: e.target.value})} value={user.name} type="email" name="email" id='email' placeholder='Enter email'/>
+          </div>
+          {(error.firstNameError != "") ? (<div className="error_message">{error.firstNameError}</div>) : ""}
+          <div className="form-group">
+            <label htmlFor='first-name'>First name:</label>
+            <input onChange={e => setUser({...user, firstName: e.target.value})} value={user.firstName} type="text" name="first-name" id='first-name' placeholder='Enter first name'/>
+          </div>
+          {(error.secondNameError != "") ? (<div className="error_message">{error.secondNameError}</div>) : ""}
+          <div className="form-group">
+            <label htmlFor='second-name'>Second name:</label>
+            <input onChange={e => setUser({...user, secondName: e.target.value})} value={user.secondName} type="text" name="second-name" id='second-name' placeholder='Enter second name'/>
+          </div>
+          {(error.passwordError != "") ? (<div className="error_message">{error.passwordError}</div>) : ""}
+          <div className="form-group">
+            <label htmlFor='password'>Password:</label>
+            <input onChange={e => setUser({...user, password: e.target.value})} value={user.password} type="password" name="password" id='password' placeholder='Enter password'/>
+          </div>
+          <div className="form-group">
+          {(error.repeatPasswordError != "") ? (<div className="error_message">{error.repeatPasswordError}</div>) : ""}
+            <label htmlFor='repeat-password'>Repeat Password:</label>
+            <input onChange={e => setUser({...user, repeatPassword: e.target.value})} value={user.repeatPassword} type="password" name="repeat-password" id='repeat-password' placeholder='Repeat password'/>
+          </div>
+          <button type='submit'>REGISTARTION</button>
+        </div>
+    </form>
+  );
+};
+*/
+export default RegistartionForm

@@ -120,3 +120,8 @@ form .form-inner input[type="submit"]:hover,
     color: #FE4880;
     font-weight: 700;
 }
+
+.error_message {
+    color: red;
+    font-size: 18px;
+}
