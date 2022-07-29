@@ -1,7 +1,31 @@
 import React, {useState} from 'react';
 import LoginForm from './componets/LoginForm';
 import RegistartionForm from './componets/RegistrationForm';
+import Header from './componets/Header';
+import Footer from './componets/footer';
+import MainContent from './componets/main-content';
 
+import './main-content.css';
+
+
+
+function App() {
+
+
+  return (
+    
+    <div className="container">
+      {/* <Header/> */}
+      <MainContent/>
+      <Footer/>
+    </div>
+  );
+}
+
+
+
+/*
+REGISTRATION
 
 function App() {
 const [users, setUser] = useState({email: ""})
@@ -38,9 +62,9 @@ const Registration = user => {
 }
 
 
-
-
 /*
+
+LOGIN
 
 {/* function App() {
 console.log("App form");
