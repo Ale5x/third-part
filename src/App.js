@@ -4,8 +4,11 @@ import RegistartionForm from './componets/RegistrationForm';
 import Header from './componets/Header';
 import Footer from './componets/footer';
 import MainContent from './componets/main-content';
-
-import './main-content.css';
+import Test from './componets/test';
+import TestMainContent from './componets/testMainContent';
+import PhotosContent from './componets/test/PhotosContent';
+// import './main-content.css';
+import CertificatreCatalog from './componets/certificatreCatalog';
 
 
 
@@ -13,11 +16,15 @@ function App() {
 
 
   return (
-    
+
     <div className="container">
       {/* <Header/> */}
-      <MainContent/>
-      <Footer/>
+      {/* <MainContent/> */}
+      {/* <Footer/> */}
+      {/* <TestMainContent/> */}
+      {/* <Test/> */}
+      {/* <PhotosContent/> */}
+      <CertificatreCatalog/>
     </div>
   );
 }
@@ -34,7 +41,7 @@ const [error, setError] = useState("");
 
 const Registration = user => {
     console.log(user);
-  
+
 
     setUser({
       email: user.email
@@ -47,16 +54,16 @@ const Registration = user => {
   }
 
   return (
-    
+
     <div className="App">
-      
+
     {(users.email != "") ? (
       <div className='welcome'>
         <h2>Welcome, Registartion SuccessFull</h2>
         <button onClick={Logout}>Logout</button>
       </div>
       ) : (<RegistartionForm Registration={Registration}/>)}
-  
+
     </div>
   );
 }
@@ -96,19 +103,19 @@ console.log("App form");
   }
 
   return (
-    
+
     <div className="App">
-      
+
       {(user.email !== "") ? (
         <div className='welcome'>
           <h2>Welcome, <span>{user.name}</span></h2>
           <button onClick={Logout}>Logout</button>
         </div>
-      ) : (<LoginForm Login={Login} error={error}/>)} 
+      ) : (<LoginForm Login={Login} error={error}/>)}
     </div>
   );
 }
 
 */
 
-export default App; 
+export default App;

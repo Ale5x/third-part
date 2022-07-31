@@ -1,0 +1,35 @@
+.pages {
+    margin: 20px 0;
+}
+
+.page, .current-page {
+     @extend .pages
+     border: 1px solid lightgray;
+     border-radius: 100%;
+     padding: 5px;
+     margin: 0 10px;   
+     cursor: pointer;
+}
+
+.current-page {
+    border: 2px solid gray;
+    font-weight: 700;
+}
+
+
+table {
+    width: 100%; /* Ширина таблицы */
+    border-collapse: collapse; /* Убираем двойные линии между ячейками */
+   }
+   td, th {
+    padding: 3px; /* Поля вокруг содержимого таблицы */
+    border: 1px solid #000; /* Параметры рамки */
+   }
+   th {
+    background: #afd792; /* Цвет фона */
+    color: #333;  /* Цвет текста */
+   }
+   tbody tr:hover {
+    background: #f3bd48; /* Цвет фона при наведении */
+    color: #fff; /* Цвет текста при наведении */
+   }
