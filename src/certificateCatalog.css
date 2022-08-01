@@ -1,24 +1,84 @@
-.pages {
-    margin: 20px 0;
-}
-
-.page, .current-page {
-     @extend .pages
-     border: 1px solid lightgray;
-     border-radius: 100%;
-     padding: 5px;
-     margin: 0 10px;   
-     cursor: pointer;
-}
 
 .current-page {
     border: 2px solid gray;
     font-weight: 700;
+    border: 1px solid lightgray;
+    border-radius: 100%;
+    padding: 5px;
+    margin: 0 10px;  
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.position-prev-btn {
+    margin-left: 5%;
+}
+
+.pages-conteiner {
+    display: flex;
+    margin: 30px;
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 30px;
+}
+
+.position-pages {
+    width: 100px;
+    margin-left: 30%;
+}
+
+.position-next-btn {
+    margin-left: 30%;
+}
+
+.main-content {
+    margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 98%;
+}
+
+.message {
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 25px;
+    color: red;
+}
+
+.input-search {
+    width: 50%;
+    padding: 10px 15px;
+    background-color: #0bd4c0;
+    border-radius: 8px;
+    margin-left: calc(50% - 25%);
+    text-align: center;
+}
+
+.settings-content  {
+    font-size: 18px;
+    margin-bottom: 15px;
+    display: inline-blocks;
+}
+
+.settings-span {
+    margin-left: 30px;
+    margin-right: 30px;
 }
 
 
+
+
+
+.settings-content {
+    margin: 30px;
+}
+
 table {
-    width: 100%; /* Ширина таблицы */
+    width: 95%; /* Ширина таблицы */
     border-collapse: collapse; /* Убираем двойные линии между ячейками */
    }
    td, th {
@@ -26,10 +86,42 @@ table {
     border: 1px solid #000; /* Параметры рамки */
    }
    th {
-    background: #afd792; /* Цвет фона */
-    color: #333;  /* Цвет текста */
+    background: grey; /* Цвет фона */
+    color: black;  /* Цвет текста */
    }
    tbody tr:hover {
-    background: #f3bd48; /* Цвет фона при наведении */
+    background: rgb(37, 36, 36); /* Цвет фона при наведении */
     color: #fff; /* Цвет текста при наведении */
    }
+ 
+
+.btn, .btn-delete, .btn-view, .btn-edit {
+    font-weight: 700;
+    color: #fff;
+    text-decoration: none;
+    padding: .8em 1em calc(.8em + 3px);
+    border-radius: 3px;
+    transition: 0.2s;
+    margin: 3px;
+}
+.btn-delete {
+    background: red;
+}
+
+.btn-view {
+    background: rgba(8, 21, 199, 0.767);
+}
+.btn-edit {
+    background: rgba(194, 207, 17, 0.774);
+}
+
+.btn-navigation {
+    font-weight: 700;
+    color: #FFF;
+    text-decoration: none;
+    padding: .8em 1em calc(.8em + 3px);
+    border-radius: 3px;
+    transition: 0.2s;
+    margin: 3px;
+    background: #000;
+}
