@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import './ModalViewItem.css';
 // import './main-content.css';
 import './certificateCatalog.css'
 import './header-user.css';

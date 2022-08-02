@@ -19,13 +19,13 @@ function App() {
   return (
 
     <div className="container">
-      <Header/>
+      {/* <Header/> */}
       {/* <MainContent/> */}
       {/* <Footer/> */}
       {/* <TestMainContent/> */}
       {/* <Test/> */}
       {/* <PhotosContent/> */}
-      {/* <CertificatreCatalog/> */}
+      <CertificatreCatalog/>
     </div>
   );
 }

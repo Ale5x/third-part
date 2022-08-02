@@ -6,7 +6,8 @@ import product_card from "../data/data-content";
 
 
 function CertificatreCatalog() {
-    const [items, setItems] = useState(product_card._embedded.giftCertificateDtoList);
+    // const [items, setItems] = useState(product_card._embedded.giftCertificateDtoList);
+    const [items, setItems] = useState([]);
     const [viewItem, setViewItem] = useState(0);
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const [openModalViewItem, setOpenModalViewItem] = useState(false);
@@ -93,6 +94,7 @@ function CertificatreCatalog() {
 
     const acctionViewItem = (e) => {
         console.log("ITEM ID", e.target.value);
+        setViewItem(e.target.value);
         setOpenModalViewItem(true);
     }
 
@@ -109,53 +111,53 @@ function CertificatreCatalog() {
     }
 
     const ModalMessag = status => {
-            if(status) {
-                setMessage(`Item with id: ${id} deleted`);
-                setId(0);
-                setOpenModalDelete(false);
-                setFetching(true);
-            } else {
-                setOpenModalDelete(false);
-                setMessage("");
-                console.log("set ID 0");
-                setId(0);
-            }
+        if(status) {
+            setMessage(`Item with id: ${id} deleted`);
+            setId(0);
+            setOpenModalDelete(false);
+            setFetching(true);
+        } else {
+            setOpenModalDelete(false);
+            setMessage("");
+            console.log("set ID 0");
+            setId(0);
         }
+    }
 
-        const ModalViewItem = () => {
-                console.log("START ModalViewItem")
-        }
+    const ModalViewItem = () => {
+        console.log("START ModalViewItem")
+    }
 
     useEffect(() => {
         let url = ""
         if(fetching) {
-        //    if(nameValue !== "") {
-        //     axios.get(`http://localhost:8080/store/certificate/getCertificatesByPartName?size=10&page=${currentPage}&name=${nameValue}`)
-        //     .then(response => {
-        //         setItems([...response.data._embedded.giftCertificateDtoList]);
-        //     })
-        //     .finally(() => 
-        //     setFetching(false));
-        //    } else {
+           if(nameValue !== "") {
+            axios.get(`http://localhost:8080/store/certificate/getCertificatesByPartName?size=10&page=${currentPage}&name=${nameValue}`)
+            .then(response => {
+                setItems([...response.data._embedded.giftCertificateDtoList]);
+            })
+            .finally(() => 
+            setFetching(false));
+           } else {
            
-        //     if(typeStatus.typeSortDate) {
-        //         url = `http://localhost:8080/store/certificate/allSortDate?size=${countItems}&page=${currentPage}`;
-        //     } else if(typeStatus.typeReverseSortDate) {
-        //         url = `http://localhost:8080/store/certificate/allSortReverseDate?size=${countItems}&page=${currentPage}`;
-        //     } else {
-        //         url = `http://localhost:8080/store/certificate/getAllCertificates?size=${countItems}&page=${currentPage}`;
-        //         console.log("TYPE OUTPUT AND SET URL");
-        //         setUrl(url);
-        //     }
+            if(typeStatus.typeSortDate) {
+                url = `http://localhost:8080/store/certificate/allSortDate?size=${countItems}&page=${currentPage}`;
+            } else if(typeStatus.typeReverseSortDate) {
+                url = `http://localhost:8080/store/certificate/allSortReverseDate?size=${countItems}&page=${currentPage}`;
+            } else {
+                url = `http://localhost:8080/store/certificate/getAllCertificates?size=${countItems}&page=${currentPage}`;
+                console.log("TYPE OUTPUT AND SET URL");
+                setUrl(url);
+            }
 
-        //     console.log("TEST URL After DELETING", url);
-        //     axios.get(url)
-        //     .then(response => {
-        //         setItems([...response.data._embedded.giftCertificateDtoList]);
-        //     })
-        //     .finally(() => 
-        //     setFetching(false));
-        //    }
+            console.log("TEST URL After DELETING", url);
+            axios.get(url)
+            .then(response => {
+                setItems([...response.data._embedded.giftCertificateDtoList]);
+            })
+            .finally(() => 
+            setFetching(false));
+           }
         }
     }, [fetching])
 
@@ -166,7 +168,7 @@ function CertificatreCatalog() {
         <div className='main-content'>
         <div>
             {openModalDelete && <ModalMessage ModalMessag = {ModalMessag} id={id}/>}
-            {openModalViewItem && <ModelViewItem ModalMessag = {ModalMessag} id={id}/>}
+            {openModalViewItem && <ModelViewItem id={viewItem} closeModal={setOpenModalViewItem}/>}
         </div>
         <div>
             <div className='message'>
