@@ -2,7 +2,8 @@ import React from 'react'
 
 export default function header() {
   return (
-    <nav>
+    <div className='header'>
+      <nav>
         <div className='logo'>Roers...</div>
         <ui>
             <li>Home</li>
@@ -10,10 +11,13 @@ export default function header() {
             <li>About Us</li>
             <li>Contact</li>
         </ui>
-        <div className='search'>
-            <i className='fa fa-search'></i>
-            <i className='fa fa-shoping-basket'></i>
+        <div className='logination'>
+          <ui>
+            <li>Sing in</li>
+            <li>Sign out</li>
+          </ui>
         </div>
     </nav>
+    </div>
   )
 }

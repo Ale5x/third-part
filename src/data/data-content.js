@@ -1,3 +1,14 @@
+const product_card_item ={
+        "giftCertificateDtoId": 1,
+        "name": "Auto",
+        "description": "Description of the car certificate",
+        "price": 33.00,
+        "duration": 3,
+        "createDate": "2022-05-10T14:33:33",
+        "lastUpdateDate": "2022-05-10T14:33:33",
+        "tags": "#Tag 5, #Tag 4, #Tag 1, #Tag 2, #Tag 3"
+    };
+
 const product_card = 
     {
     "_embedded": {
@@ -175,3 +186,4 @@ const product_card =
 // ]
 
 export default product_card;
+// export default product_card_item;

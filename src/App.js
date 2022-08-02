@@ -8,6 +8,7 @@ import Test from './componets/test';
 import TestMainContent from './componets/testMainContent';
 import PhotosContent from './componets/test/PhotosContent';
 // import './main-content.css';
+
 import CertificatreCatalog from './componets/certificatreCatalog';
 
 
@@ -18,13 +19,13 @@ function App() {
   return (
 
     <div className="container">
-      {/* <Header/> */}
+      <Header/>
       {/* <MainContent/> */}
       {/* <Footer/> */}
       {/* <TestMainContent/> */}
       {/* <Test/> */}
       {/* <PhotosContent/> */}
-      <CertificatreCatalog/>
+      {/* <CertificatreCatalog/> */}
     </div>
   );
 }

@@ -1,12 +1,15 @@
 import React, {useState, useEffect}  from 'react'
 import axios from 'axios'
 import ModalMessage from './ModalMessage';
+import ModelViewItem from './ModelViewItem';
 import product_card from "../data/data-content";
 
 
 function CertificatreCatalog() {
-    const [items, setItems] = useState([]);
-    const [openModal, setOpenModal] = useState(false);
+    const [items, setItems] = useState(product_card._embedded.giftCertificateDtoList);
+    const [viewItem, setViewItem] = useState(0);
+    const [openModalDelete, setOpenModalDelete] = useState(false);
+    const [openModalViewItem, setOpenModalViewItem] = useState(false);
     const [dispatch, setDispatch] = useState();
     const [typeStatus, setTypeStatus] = useState({typeDefault: true, typeSortDate: false, typeReverseSortDate: false})
     
@@ -82,12 +85,15 @@ function CertificatreCatalog() {
     }
 
     const acctionDelete = (e) =>  {
-        setOpenModal(true)
+        setId(e.target.value)
+        setOpenModalDelete(true)
         console.log("acctionDelete id value", e.target.value);
-        setMessage(`Item with id ${e.target.value} deleted`)
+        
+    }
 
-        console.log("Open MOdel status", openModal);
-        setFetching(true);
+    const acctionViewItem = (e) => {
+        console.log("ITEM ID", e.target.value);
+        setOpenModalViewItem(true);
     }
 
     const navigationNextPage = () => {
@@ -102,45 +108,65 @@ function CertificatreCatalog() {
         }
     }
 
+    const ModalMessag = status => {
+            if(status) {
+                setMessage(`Item with id: ${id} deleted`);
+                setId(0);
+                setOpenModalDelete(false);
+                setFetching(true);
+            } else {
+                setOpenModalDelete(false);
+                setMessage("");
+                console.log("set ID 0");
+                setId(0);
+            }
+        }
+
+        const ModalViewItem = () => {
+                console.log("START ModalViewItem")
+        }
 
     useEffect(() => {
         let url = ""
         if(fetching) {
-           if(nameValue !== "") {
-            axios.get(`http://localhost:8080/store/certificate/getCertificatesByPartName?size=10&page=${currentPage}&name=${nameValue}`)
-            .then(response => {
-                setItems([...response.data._embedded.giftCertificateDtoList]);
-            })
-            .finally(() => 
-            setFetching(false));
-           } else {
+        //    if(nameValue !== "") {
+        //     axios.get(`http://localhost:8080/store/certificate/getCertificatesByPartName?size=10&page=${currentPage}&name=${nameValue}`)
+        //     .then(response => {
+        //         setItems([...response.data._embedded.giftCertificateDtoList]);
+        //     })
+        //     .finally(() => 
+        //     setFetching(false));
+        //    } else {
            
-            if(typeStatus.typeSortDate) {
-                url = `http://localhost:8080/store/certificate/allSortDate?size=${countItems}&page=${currentPage}`;
-            } else if(typeStatus.typeReverseSortDate) {
-                url = `http://localhost:8080/store/certificate/allSortReverseDate?size=${countItems}&page=${currentPage}`;
-            } else {
-                url = `http://localhost:8080/store/certificate/getAllCertificates?size=${countItems}&page=${currentPage}`;
-                console.log("TYPE OUTPUT AND SET URL");
-                setUrl(url);
-            }
+        //     if(typeStatus.typeSortDate) {
+        //         url = `http://localhost:8080/store/certificate/allSortDate?size=${countItems}&page=${currentPage}`;
+        //     } else if(typeStatus.typeReverseSortDate) {
+        //         url = `http://localhost:8080/store/certificate/allSortReverseDate?size=${countItems}&page=${currentPage}`;
+        //     } else {
+        //         url = `http://localhost:8080/store/certificate/getAllCertificates?size=${countItems}&page=${currentPage}`;
+        //         console.log("TYPE OUTPUT AND SET URL");
+        //         setUrl(url);
+        //     }
 
-            console.log("TEST URL After DELETING", url);
-            axios.get(url)
-            .then(response => {
-                setItems([...response.data._embedded.giftCertificateDtoList]);
-            })
-            .finally(() => 
-            setFetching(false));
-           }
+        //     console.log("TEST URL After DELETING", url);
+        //     axios.get(url)
+        //     .then(response => {
+        //         setItems([...response.data._embedded.giftCertificateDtoList]);
+        //     })
+        //     .finally(() => 
+        //     setFetching(false));
+        //    }
         }
     }, [fetching])
 
-   let messageModal = "Are You sure You want to delete item with ID?";
+
   return (
-    <div className='main-content'>
+    <div>
+        
+        <div className='main-content'>
         <div>
-            {openModal && <ModalMessage closeModal = {setOpenModal}/>}
+            {openModalDelete && <ModalMessage ModalMessag = {ModalMessag} id={id}/>}
+            {openModalViewItem && <ModelViewItem ModalMessag = {ModalMessag} id={id}/>}
         </div>
         <div>
             <div className='message'>
@@ -194,9 +220,8 @@ function CertificatreCatalog() {
                             <td>{item.duration}</td>
                             <td>
                                 <button onClick={acctionDelete} value={item.giftCertificateDtoId} className='btn-delete'>Delete</button>
-                        
-                                <button onClick={acctionDelete} value={item.giftCertificateDtoId} className='btn-edit'>Edit</button>
-                                <button onClick={acctionDelete} value={item.giftCertificateDtoId} className='btn-view'>View</button>
+                                <button onClick={() => setOpenModalViewItem(true)} value={item} className='btn-edit'>Edit</button>
+                                <button onClick={acctionViewItem} value={item.giftCertificateDtoId} className='btn-view'>View</button>
                             </td>
                         </tr>)}
                 </tbody>
@@ -225,6 +250,7 @@ function CertificatreCatalog() {
         </ui>
             </div>
         </div>
+    </div>
     </div>
   )
 }
