@@ -4,6 +4,7 @@ import './index.css';
 import './ModalViewItem.css';
 // import './main-content.css';
 import './certificateCatalog.css'
+import './footer.css'
 import './header-user.css';
 import App from './App';
 import LoginForm from './componets/LoginForm';

@@ -2,15 +2,18 @@ import React, {useState, useEffect}  from 'react'
 import axios from 'axios'
 import ModalMessage from './ModalMessage';
 import ModelViewItem from './ModelViewItem';
+import ModelAddItem from './ModelAddItem';
 import product_card from "../data/data-content";
 
 
 function CertificatreCatalog() {
-    // const [items, setItems] = useState(product_card._embedded.giftCertificateDtoList);
-    const [items, setItems] = useState([]);
+    const [items, setItems] = useState(product_card._embedded.giftCertificateDtoList);
+    // const [items, setItems] = useState([]);
     const [viewItem, setViewItem] = useState(0);
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const [openModalViewItem, setOpenModalViewItem] = useState(false);
+    const [openModalAddItem, setOpenModalAddItem] = useState(false);
+    const [lastPage, setLastPage] = useState(50);
     const [dispatch, setDispatch] = useState();
     const [typeStatus, setTypeStatus] = useState({typeDefault: true, typeSortDate: false, typeReverseSortDate: false})
     
@@ -130,51 +133,55 @@ function CertificatreCatalog() {
 
     useEffect(() => {
         let url = ""
-        if(fetching) {
-           if(nameValue !== "") {
-            axios.get(`http://localhost:8080/store/certificate/getCertificatesByPartName?size=10&page=${currentPage}&name=${nameValue}`)
-            .then(response => {
-                setItems([...response.data._embedded.giftCertificateDtoList]);
-            })
-            .finally(() => 
-            setFetching(false));
-           } else {
+        // if(fetching) {
+        //    if(nameValue !== "") {
+        //     axios.get(`http://localhost:8080/store/certificate/getCertificatesByPartName?size=10&page=${currentPage}&name=${nameValue}`)
+        //     .then(response => {
+        //         setItems([...response.data._embedded.giftCertificateDtoList]);
+        //     })
+        //     .finally(() => 
+        //     setFetching(false));
+        //    } else {
            
-            if(typeStatus.typeSortDate) {
-                url = `http://localhost:8080/store/certificate/allSortDate?size=${countItems}&page=${currentPage}`;
-            } else if(typeStatus.typeReverseSortDate) {
-                url = `http://localhost:8080/store/certificate/allSortReverseDate?size=${countItems}&page=${currentPage}`;
-            } else {
-                url = `http://localhost:8080/store/certificate/getAllCertificates?size=${countItems}&page=${currentPage}`;
-                console.log("TYPE OUTPUT AND SET URL");
-                setUrl(url);
-            }
+        //     if(typeStatus.typeSortDate) {
+        //         url = `http://localhost:8080/store/certificate/allSortDate?size=${countItems}&page=${currentPage}`;
+        //     } else if(typeStatus.typeReverseSortDate) {
+        //         url = `http://localhost:8080/store/certificate/allSortReverseDate?size=${countItems}&page=${currentPage}`;
+        //     } else {
+        //         url = `http://localhost:8080/store/certificate/getAllCertificates?size=${countItems}&page=${currentPage}`;
+        //         console.log("TYPE OUTPUT AND SET URL");
+        //         setUrl(url);
+        //     }
 
-            console.log("TEST URL After DELETING", url);
-            axios.get(url)
-            .then(response => {
-                setItems([...response.data._embedded.giftCertificateDtoList]);
-            })
-            .finally(() => 
-            setFetching(false));
-           }
-        }
+        //     console.log("TEST URL After DELETING", url);
+        //     axios.get(url)
+        //     .then(response => {
+        //         setItems([...response.data._embedded.giftCertificateDtoList]);
+        //     })
+        //     .finally(() => 
+        //     setFetching(false));
+        //    }
+        // }
     }, [fetching])
 
 
   return (
     <div>
-        
+        <div className='addBtn'>
+            <button onClick={() => setOpenModalAddItem(true)} className='btn-add'>Add new Certificate</button>
+        </div>
         <div className='main-content'>
         <div>
             {openModalDelete && <ModalMessage ModalMessag = {ModalMessag} id={id}/>}
             {openModalViewItem && <ModelViewItem id={viewItem} closeModal={setOpenModalViewItem}/>}
+            {openModalAddItem && <ModelAddItem closeModal={setOpenModalAddItem} error={setMessage}/>}
         </div>
         <div>
             <div className='message'>
-                {(message != "") ? message : ""}
+                <h1>{(message != "") ? message : ""}</h1>
             </div>
         </div>
+        
         <div className='search-content'>
             <input type='search' placeholder='Enter name' onChange={searchByName} className='input-search'></input>
         </div>
@@ -230,15 +237,13 @@ function CertificatreCatalog() {
             </table>
             <div className='pages'>
                 <span>
-                    <span className='position-prev-btn'>
+                    <span className='settings-span'>
                         <button className='btn-navigation' onClick={navigationPrevPage}>Prev</button>
                     </span>
-                    <span className=''>
-                        <span className='current-page'>
+                    <span className='current-page'>
                             {currentPage}
-                        </span>
                     </span>
-                    <span className='position-next-btn'>
+                    <span className='settings-span'>
                         <button className='btn-navigation' onClick={navigationNextPage}>Next</button>
                     </span>
                 </span>

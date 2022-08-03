@@ -1,13 +1,17 @@
-
+.pages {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+}
 .current-page {
-    border: 2px solid gray;
+    font-size: 25px;
+   
     font-weight: 700;
-    border: 1px solid lightgray;
-    border-radius: 100%;
-    padding: 5px;
-    margin: 0 10px;  
+    margin: 10px 10px;  
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 30px;
 }
 
 .position-prev-btn {
@@ -95,7 +99,7 @@ table {
    }
  
 
-.btn, .btn-delete, .btn-view, .btn-edit {
+.btn, .btn-delete, .btn-view, .btn-edit, .btn-add  {
     font-weight: 700;
     color: #fff;
     text-decoration: none;
@@ -113,6 +117,10 @@ table {
 }
 .btn-edit {
     background: rgba(194, 207, 17, 0.774);
+}
+.btn-add {
+    background: green;
+    left: 500px;
 }
 
 .btn-navigation {

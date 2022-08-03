@@ -10,6 +10,7 @@ import PhotosContent from './componets/test/PhotosContent';
 // import './main-content.css';
 
 import CertificatreCatalog from './componets/certificatreCatalog';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 
 
 
@@ -17,20 +18,32 @@ function App() {
 
 
   return (
-
-    <div className="container">
-      {/* <Header/> */}
-      {/* <MainContent/> */}
-      {/* <Footer/> */}
-      {/* <TestMainContent/> */}
-      {/* <Test/> */}
-      {/* <PhotosContent/> */}
-      <CertificatreCatalog/>
-    </div>
+    <Router>
+      <Header/>
+      <Routes>
+        <Route path='login' element={<LoginForm/>}/>
+        <Route path='certificate-catalog' element={<CertificatreCatalog/>}/>
+      </Routes>
+      <Footer/>
+    </Router>
   );
 }
 
 
+
+/*
+ <div className="container">
+      <Header/>
+      { <MainContent/> }
+      { <Footer/> }
+      { <TestMainContent/> }
+      { <Test/> }
+      { <PhotosContent/> }
+      { <CertificatreCatalog/> }
+      </div>
+      );
+
+*/
 
 /*
 REGISTRATION

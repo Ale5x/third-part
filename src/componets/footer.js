@@ -3,9 +3,16 @@ import React from 'react'
 export default function Footer() {
   return (
     <div className='footer'>
-        <p>copyright 2022</p>
-        <div className='social'>
-            <i className='fa fa-facebook'></i>
+        <div className='content'>
+          <div className='footer-logo'>copyright 2022</div>
+          <div className='social'>
+              <ui className='social-content'>
+                <li>FaceBook</li>
+                <li>Instagram</li>
+                <li>Twitter</li>
+                <li>Telegram</li>
+              </ui>
+          </div>
         </div>
     </div>
   )

@@ -22,10 +22,18 @@
     align-items: center;
 }
 
-.modalContainer .title {
+.modalContainer .title, .title-color {
     display: inline-block;
     text-align: center;
     margin-top: 20px;
+}
+
+.title-color {
+    width: 100%;
+    font-size: 30px;
+    color: white;
+    background-color: black;
+    margin-bottom: 15px;
 }
 
 .titleCloseBtn {
@@ -64,6 +72,18 @@
 #cancelBtn {
     background-color: crimson;
 } 
+
+.form-group input, textarea {
+    width: 800px;
+    height: 30px;
+    border-radius: 5px;
+    background: none;
+}
+
+.text-content-area {
+    height: 130px;
+}
+
 
 /*
 * {
