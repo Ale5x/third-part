@@ -1,4 +1,4 @@
-* {
+/* * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -12,7 +12,7 @@ input, button {
     outline: none;
 }
 
-.LoginForm {
+.Log {
     height: 100vh;
     display: flex;
     align-items: center;
@@ -124,4 +124,4 @@ input, button {
 .error_message {
     color: red;
     font-size: 18px;
-}
+} */

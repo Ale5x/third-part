@@ -1,22 +1,45 @@
 import React, {useState} from "react";
+import axios from 'axios';
 
 function LoginForm({Login, error}) {
-    const [details, setDetails] = useState({name: "", email: "", password: ""});
+    const [details, setDetails] = useState({email: "", password: ""});
+
+    const body = { useremail: details.email,
+                   password: details.password};
+    const headers = {
+        "Access-Control-Allow-Origin": "*",
+        "Accept": "*/*",
+        'Content-Type': 'application/json'
+        }
 
     const submitHandler = e => {
         e.preventDefault();
+        //localhost:8080/login
+        axios.post("http://localhost:8080/login", {
+            
+                // "headers": headers,
+                "body": body
+        })
+        .then(response => {
+            if(response.status == 200) {
+                console.log("LOGINATION SUCCESSFUL");
+            } else {
+                console.log("LOGINATION NO SUCCESSFUL");
+            }
+            console.log("BODY", JSON.stringify(body))
+            console.log("response", response)
+        })
+        
+        console.log("BODY", JSON.stringify(body))
 
-        Login(details)
+        
+    
     }
 
      return (<form onSubmit={submitHandler}>
         <div className="form-inner">
             <h2>Login</h2>
             {(error != "") ? (<div className="error">{error}</div>) : ""}
-            <div className="form-group">
-                <label htmlFor="name">Name:</label>
-                <input type="text" name="name" id="name" onChange={e => setDetails({...details, name: e.target.value})} value={details.name}></input>
-            </div>
             <div className="form-group">
                 <label htmlFor="email">Email:</label>
                 <input type="email" name="email" id="email" onChange={e => setDetails({...details, email: e.target.value})} value={details.email}></input>

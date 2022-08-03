@@ -12,13 +12,13 @@ function ModalMessage({ModalMessag, id}) {
     <div className='modalBackground'>
         <div className='modalContainer'>
             <button className='titleCloseBtn' onClick={e => status(false)}>X</button>
-            <div className='title'>
+            <div className='title-model'>
                 <h1>"Are You sure You want to delete item with ID: {id}?"</h1>
             </div>
-            <div className='body'>
+            <div className='body-model'>
                 
             </div>
-            <div className='footer'>
+            <div className='footer-model'>
                 <button onClick={e => status(true)}>Delete</button>
                 <button onClick={e => status(false)} id='cancelBtn'>Cancel</button>
             </div>

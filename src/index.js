@@ -1,14 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import './ModalViewItem.css';
+import './index.css'
+// import './Modal.css';
 // import './main-content.css';
-import './certificateCatalog.css'
-import './footer.css'
-import './header-user.css';
+// import './certificateCatalog.css'
+// import './footer.css'
+// import './header-user.css';
 import App from './App';
-import LoginForm from './componets/LoginForm';
+// import LoginForm from './componets/LoginForm';
 import reportWebVitals from './reportWebVitals';
+// import './styles/LoginStyle.css';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

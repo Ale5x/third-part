@@ -37,12 +37,12 @@ function ModelViewItem({id, closeModal}) {
          
       })
       
-    
+
   
   return (
     <div className='modalBackground'>
         <div className='modalContainer'>
-        <div className='body'>
+        <div className='body-model'>
             <p>
                 <b>ID: </b> <span>{item.giftCertificateDtoId}</span>
             </p>
@@ -51,6 +51,9 @@ function ModelViewItem({id, closeModal}) {
             </p>
             <p>
                 <b>Tags:</b> {item.tags}
+            </p>
+            <p>
+                <b>Price:</b> {item.price}
             </p>
             <p>
                 <b>Created:</b> {item.createDate}
@@ -66,7 +69,7 @@ function ModelViewItem({id, closeModal}) {
             </p>
 
         </div>
-        <div className='footer'>
+        <div className='footer-model'>
             <button onClick={() => closeModal(false)}>Close</button>
         </div>
         </div>

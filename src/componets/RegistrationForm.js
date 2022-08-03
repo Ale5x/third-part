@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import '../index.css';
+
 
 function RegistartionForm({Registration}) {
   const [user, setUser] = useState({email: "", firstName: "", secondName: "", password: "", repeatPassword: ""});

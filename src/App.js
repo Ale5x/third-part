@@ -8,6 +8,10 @@ import Test from './componets/test';
 import TestMainContent from './componets/testMainContent';
 import PhotosContent from './componets/test/PhotosContent';
 // import './main-content.css';
+import Navigation from './componets/Navigation';
+// import Styles from './componets/Styles';
+
+import  './styles/LoginStyle.css'
 
 import CertificatreCatalog from './componets/certificatreCatalog';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
@@ -18,14 +22,20 @@ function App() {
 
 
   return (
-    <Router>
-      <Header/>
-      <Routes>
-        <Route path='login' element={<LoginForm/>}/>
-        <Route path='certificate-catalog' element={<CertificatreCatalog/>}/>
-      </Routes>
-      <Footer/>
-    </Router>
+    <div>
+      {/* <Styles/> */}
+      {/* <Header/> */}
+      <Navigation/>
+      {/* <Footer/> */}
+    </div>
+    // <Router>
+    //   <Header/>
+    //   <Routes>
+    //     <Route path='login' element={<LoginForm/>}/>
+    //     <Route path='certificate-catalog' element={<CertificatreCatalog/>}/>
+    //   </Routes>
+    //   <Footer/>
+    // </Router>
   );
 }
 

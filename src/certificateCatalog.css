@@ -1,8 +1,9 @@
-.pages {
+/* .pages {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: 15px;
+
 }
 .current-page {
     font-size: 25px;
@@ -16,6 +17,11 @@
 
 .position-prev-btn {
     margin-left: 5%;
+}
+
+.footer-for-padding {
+    padding: 30px;
+    display : inline-block;
 }
 
 .pages-conteiner {
@@ -82,20 +88,20 @@
 }
 
 table {
-    width: 95%; /* Ширина таблицы */
-    border-collapse: collapse; /* Убираем двойные линии между ячейками */
+    width: 95%; 
+    border-collapse: collapse; 
    }
    td, th {
-    padding: 3px; /* Поля вокруг содержимого таблицы */
-    border: 1px solid #000; /* Параметры рамки */
+    padding: 3px; 
+    border: 1px solid #000; 
    }
    th {
-    background: grey; /* Цвет фона */
-    color: black;  /* Цвет текста */
+    background: grey;
+    color: black;  
    }
    tbody tr:hover {
-    background: rgb(37, 36, 36); /* Цвет фона при наведении */
-    color: #fff; /* Цвет текста при наведении */
+    background: rgb(37, 36, 36);
+    color: #fff; 
    }
  
 
@@ -132,4 +138,4 @@ table {
     transition: 0.2s;
     margin: 3px;
     background: #000;
-}
+} */

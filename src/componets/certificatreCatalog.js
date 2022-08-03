@@ -3,6 +3,7 @@ import axios from 'axios'
 import ModalMessage from './ModalMessage';
 import ModelViewItem from './ModelViewItem';
 import ModelAddItem from './ModelAddItem';
+import ModelUpdateItem from './ModelUpdateItem';
 import product_card from "../data/data-content";
 
 
@@ -10,8 +11,10 @@ function CertificatreCatalog() {
     const [items, setItems] = useState(product_card._embedded.giftCertificateDtoList);
     // const [items, setItems] = useState([]);
     const [viewItem, setViewItem] = useState(0);
+    const [editItem, setEditItem] = useState(0);
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const [openModalViewItem, setOpenModalViewItem] = useState(false);
+    const [openModalEditItem, setOpenModalEditItem] = useState(false);
     const [openModalAddItem, setOpenModalAddItem] = useState(false);
     const [lastPage, setLastPage] = useState(50);
     const [dispatch, setDispatch] = useState();
@@ -91,6 +94,7 @@ function CertificatreCatalog() {
     const acctionDelete = (e) =>  {
         setId(e.target.value)
         setOpenModalDelete(true)
+        setFetching(true);
         console.log("acctionDelete id value", e.target.value);
         
     }
@@ -99,6 +103,11 @@ function CertificatreCatalog() {
         console.log("ITEM ID", e.target.value);
         setViewItem(e.target.value);
         setOpenModalViewItem(true);
+    }
+
+    const acctionEditItem = (e) => {
+        setEditItem(e.target.value);
+        setOpenModalEditItem(true)
     }
 
     const navigationNextPage = () => {
@@ -127,41 +136,52 @@ function CertificatreCatalog() {
         }
     }
 
-    const ModalViewItem = () => {
-        console.log("START ModalViewItem")
+    const ModalMessagUpdate = status => {
+        if(status) {
+            setMessage(`Item with id: ${id} updated successfully`);
+            setEditItem(0);
+            setOpenModalEditItem(false);
+            setFetching(true);
+        } else {
+            setOpenModalEditItem(false);
+            setMessage(`Item with id: ${id} is not updated. Error`);
+            console.log("set ID 0");
+            setEditItem(0);
+        }
     }
+
 
     useEffect(() => {
         let url = ""
-        // if(fetching) {
-        //    if(nameValue !== "") {
-        //     axios.get(`http://localhost:8080/store/certificate/getCertificatesByPartName?size=10&page=${currentPage}&name=${nameValue}`)
-        //     .then(response => {
-        //         setItems([...response.data._embedded.giftCertificateDtoList]);
-        //     })
-        //     .finally(() => 
-        //     setFetching(false));
-        //    } else {
+        if(fetching) {
+           if(nameValue !== "") {
+            axios.get(`http://localhost:8080/store/certificate/getCertificatesByPartName?size=10&page=${currentPage}&name=${nameValue}`)
+            .then(response => {
+                setItems([...response.data._embedded.giftCertificateDtoList]);
+            })
+            .finally(() => 
+            setFetching(false));
+           } else {
            
-        //     if(typeStatus.typeSortDate) {
-        //         url = `http://localhost:8080/store/certificate/allSortDate?size=${countItems}&page=${currentPage}`;
-        //     } else if(typeStatus.typeReverseSortDate) {
-        //         url = `http://localhost:8080/store/certificate/allSortReverseDate?size=${countItems}&page=${currentPage}`;
-        //     } else {
-        //         url = `http://localhost:8080/store/certificate/getAllCertificates?size=${countItems}&page=${currentPage}`;
-        //         console.log("TYPE OUTPUT AND SET URL");
-        //         setUrl(url);
-        //     }
+            if(typeStatus.typeSortDate) {
+                url = `http://localhost:8080/store/certificate/allSortDate?size=${countItems}&page=${currentPage}`;
+            } else if(typeStatus.typeReverseSortDate) {
+                url = `http://localhost:8080/store/certificate/allSortReverseDate?size=${countItems}&page=${currentPage}`;
+            } else {
+                url = `http://localhost:8080/store/certificate/getAllCertificates?size=${countItems}&page=${currentPage}`;
+                console.log("TYPE OUTPUT AND SET URL");
+                setUrl(url);
+            }
 
-        //     console.log("TEST URL After DELETING", url);
-        //     axios.get(url)
-        //     .then(response => {
-        //         setItems([...response.data._embedded.giftCertificateDtoList]);
-        //     })
-        //     .finally(() => 
-        //     setFetching(false));
-        //    }
-        // }
+            axios.get(url)
+            .then(response => {
+                setItems([...response.data._embedded.giftCertificateDtoList]);
+            })
+            .finally(() => 
+            setFetching(false));
+           }
+        }
+        console.log("TEST ITEM", items)
     }, [fetching])
 
 
@@ -174,6 +194,7 @@ function CertificatreCatalog() {
         <div>
             {openModalDelete && <ModalMessage ModalMessag = {ModalMessag} id={id}/>}
             {openModalViewItem && <ModelViewItem id={viewItem} closeModal={setOpenModalViewItem}/>}
+            {openModalEditItem && <ModelUpdateItem id={editItem} closeModal={setOpenModalEditItem} status={ModalMessagUpdate}/>}
             {openModalAddItem && <ModelAddItem closeModal={setOpenModalAddItem} error={setMessage}/>}
         </div>
         <div>
@@ -229,7 +250,7 @@ function CertificatreCatalog() {
                             <td>{item.duration}</td>
                             <td>
                                 <button onClick={acctionDelete} value={item.giftCertificateDtoId} className='btn-delete'>Delete</button>
-                                <button onClick={() => setOpenModalViewItem(true)} value={item} className='btn-edit'>Edit</button>
+                                <button onClick={acctionEditItem} value={item.giftCertificateDtoId} className='btn-edit'>Edit</button>
                                 <button onClick={acctionViewItem} value={item.giftCertificateDtoId} className='btn-view'>View</button>
                             </td>
                         </tr>)}
@@ -249,12 +270,7 @@ function CertificatreCatalog() {
                 </span>
             </div>
             <div>
-            <ui className='test'>
-                <li>Home</li>
-                <li>Products</li>
-                <li>About Us</li>
-            <li>Contact</li>
-        </ui>
+                <span className='footer-for-padding'></span>
             </div>
         </div>
     </div>
