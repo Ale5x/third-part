@@ -14,26 +14,26 @@ function ModelViewItem({id, closeModal}) {
     const [error, setError] = useState("");
 
       useEffect(() => {
-        if(fetching) {
-          axios.get(`http://localhost:8080/store/certificate/get?id=${id}`)
-            .then(response => {
-              if(response.status == 200) {
-                setItem({
-                  giftCertificateDtoId: response.data.giftCertificateDtoId,
-                  name: response.data.name,
-                  tags: response.data.tags,
-                  duration: response.data.duration,
-                  createDate: response.data.createDate,
-                  lastUpdateDate: response.data.lastUpdateDate,
-                  description: response.data.description
-                })
-              } else {
-                setError("Error message")
-              }
-          })
-            .finally(() => 
-              setFetching(false));
-         }
+        // if(fetching) {
+        //   axios.get(`http://localhost:8080/store/certificate/get?id=${id}`)
+        //     .then(response => {
+        //       if(response.status == 200) {
+        //         setItem({
+        //           giftCertificateDtoId: response.data.giftCertificateDtoId,
+        //           name: response.data.name,
+        //           tags: response.data.tags,
+        //           duration: response.data.duration,
+        //           createDate: response.data.createDate,
+        //           lastUpdateDate: response.data.lastUpdateDate,
+        //           description: response.data.description
+        //         })
+        //       } else {
+        //         setError("Error message")
+        //       }
+        //   })
+        //     .finally(() => 
+        //       setFetching(false));
+        //  }
          
       })
       
@@ -42,6 +42,9 @@ function ModelViewItem({id, closeModal}) {
   return (
     <div className='modalBackground'>
         <div className='modalContainer'>
+        <div className='title-color'>
+                <p>Description</p>
+            </div>
         <div className='body-model'>
             <p>
                 <b>ID: </b> <span>{item.giftCertificateDtoId}</span>

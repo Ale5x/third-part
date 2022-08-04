@@ -1,4 +1,4 @@
-/* .pages {
+.pages {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -111,8 +111,26 @@ table {
     text-decoration: none;
     padding: .8em 1em calc(.8em + 3px);
     border-radius: 3px;
-    transition: 0.2s;
+    /* transition: 0.2s; */
+    transition: transform 100ms ease-in;
     margin: 3px;
+}
+
+.btn-delete:hover{
+    transform: scale(1.2);
+    cursor: pointer;
+}
+.btn-view:hover{
+    transform: scale(1.2);
+    cursor: pointer;
+}
+.btn-edit:hover{
+    transform: scale(1.2);
+    cursor: pointer;
+}
+.btn-add:hover{
+    transform: scale(1.2);
+    cursor: pointer;
 }
 .btn-delete {
     background: red;
@@ -138,4 +156,9 @@ table {
     transition: 0.2s;
     margin: 3px;
     background: #000;
-} */
+} 
+
+.btn-navigation:hover{
+    transform: scale(1.2);
+    cursor: pointer;
+}

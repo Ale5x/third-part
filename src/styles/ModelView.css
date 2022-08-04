@@ -1,4 +1,4 @@
-/* .modalBackground {
+.modalBackground {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.4);
@@ -8,10 +8,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 2;
 }
  
 .modalContainer {
-
+    width: 900px;
     border-radius: 12px;
     background-color: white;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
@@ -21,10 +22,23 @@
     align-items: center;
 }
 
-.modalContainer .title {
+.form-group-model {
+    font-size: 18px;
+
+}
+
+.modalContainer .title-model, .title-color {
     display: inline-block;
     text-align: center;
     margin-top: 20px;
+}
+
+.title-color {
+    width: 100%;
+    font-size: 30px;
+    color: white;
+    background-color: black;
+    margin-bottom: 15px;
 }
 
 .titleCloseBtn {
@@ -39,7 +53,7 @@
     cursor: pointer;
 }
 
-.modalContainer body {
+.modalContainer .body-modal {
     flex: 50%;
     display: flex;
     justify-content: center;
@@ -48,7 +62,7 @@
     text-align: center;
 }
 
-.modalContainer .footer button {
+.modalContainer .footer-model button {
     width: 150px;
     height: 45px;
     margin: 10px;
@@ -62,4 +76,26 @@
 
 #cancelBtn {
     background-color: crimson;
-}  */
+} 
+
+.form-group-model input, textarea {
+    width: 800px;
+    height: 30px;
+    border-radius: 5px;
+    background: none;
+}
+
+.text-content-area {
+    height: 130px;
+}
+
+.form-group {
+    margin-bottom: 10px; 
+} 
+
+.form-modal-edit, .form-modal-add {
+    width: 900px;
+}
+
+
+

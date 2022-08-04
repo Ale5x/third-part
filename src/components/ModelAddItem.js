@@ -10,6 +10,7 @@ function ModelAddItem({closeModal, error}) {
 
   return (
     <div className='modalBackground'>
+        <div className='form-modal-add'>
         <div className='modalContainer'>
             <div className='title-color'>
                 <p>Add new Certificate</p>
@@ -41,6 +42,7 @@ function ModelAddItem({closeModal, error}) {
                 <button onClick={addContent}>Add</button>
                 <button onClick={() => closeModal(false)} id='cancelBtn'>Close</button>
             </div>
+        </div>
         </div>
     </div>
   )

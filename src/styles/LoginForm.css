@@ -3,21 +3,25 @@
     padding: 0;
     box-sizing: border-box;
     font-family: montserrat, sans-serif;
-}
+} */
 
-input, button {
+.LoginForm, .RegistrationForm input, button {
     appearance: none;
     background: none;
     border: none;
     outline: none;
+
+    
 }
 
-.Log {
+.LoginForm, .RegistrationForm {
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #53565a;
+
+  
 }
 
 .form-position {
@@ -34,10 +38,12 @@ input, button {
     right: -5px;
     bottom: -5px;
     z-index: 1;
-    background-image: linear-gradient(to bottom right, #FFCE00, #FE4880);
+    /* background-image: linear-gradient(to bottom right, #FFCE00, #FE4880); */
 }
 
 .form-position .form-inner {
+    width: 330px;
+    border-radius: 10px;
     position: relative;
     display: block;
     background-color: #FFF;
@@ -83,23 +89,11 @@ input, button {
     box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
 }
 
-.form-position .form-inner input[type="submit"], 
-.welcome button {
-    display: inline-block;
-    padding: 10px 15px;
-    border-radius: 8px;
-    background-image: linear-gradient(to right, #FFCE00 50%, #FFCE00 50%, #FF4880);
-    background-size: 200%;
-    background-position: 0%;
-    transition: 0.4s;
-    color: #FFF;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.form-position .form-inner input[type="submit"]:hover,
-.welcome button:hover {
-    background-position: 100% 0%;
+.btn {
+    color: white;
+    background-color: black;
+    height: 40px;
+    border-radius: 15px;
 }
 
 .welcome {
@@ -124,4 +118,26 @@ input, button {
 .error_message {
     color: red;
     font-size: 18px;
-} */
+}
+
+.position-centr {
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: montserrat, sans-serif;
+
+    width: 100%;
+    height: 100%;
+   
+ 
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: linear-gradient(to right, #FFCE00 50%, #FFCE00 50%, #FF4880);
+    
+}
+

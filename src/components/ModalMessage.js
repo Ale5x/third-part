@@ -1,5 +1,5 @@
 import React from 'react'
-import '../Modal.css';
+
 
 function ModalMessage({ModalMessag, id}) {
  

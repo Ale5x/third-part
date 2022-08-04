@@ -111,35 +111,37 @@ function RegistartionForm({Registration}) {
 
 
 return (
-    <form onSubmit={submitHandler}>
-        <div className="form-inner">
-          <h2>Registration</h2>
-          {(placeholderStatus.emailStatus && error.emailError) && <div className='error_message'>{error.emailError}</div>}
-          <div className="form-group">
-            <label htmlFor='email'>Email:</label>
-            <input onChange={e => emailHandler(e)} onBlur={e => bluerHubdler(e)} type="email" name="email" id='email' placeholder='Enter email'/>
+    <form onSubmit={submitHandler} className='form-position'>
+        <div className='position-centr'>
+          <div className="form-inner">
+            <h2>Registration</h2>
+            {(placeholderStatus.emailStatus && error.emailError) && <div className='error_message'>{error.emailError}</div>}
+            <div className="form-group">
+              <label htmlFor='email'>Email:</label>
+              <input onChange={e => emailHandler(e)} onBlur={e => bluerHubdler(e)} type="email" name="email" id='email' placeholder='Enter email'/>
+            </div>
+            {(placeholderStatus.firstNameStatus && error.firstNameError) && <div className='error_message'>{error.firstNameError}</div>}
+            <div className="form-group">
+              <label htmlFor='first-name'>First name:</label>
+              <input onChange={e => firstNameHandler(e)}  onBlur={e => bluerHubdler(e)} type="text" name="first-name" id='first-name' placeholder='Enter first name'/>
+            </div>
+            {(placeholderStatus.secondNameStatus && error.secondNameError) && <div className='error_message'>{error.secondNameError}</div>}
+            <div className="form-group">
+              <label htmlFor='second-name'>Second name:</label>
+              <input onChange={e => secondNameHandler(e)} onBlur={e => bluerHubdler(e)} type="text" name="second-name" id='second-name' placeholder='Enter second name'/>
+            </div>
+            {(placeholderStatus.passwordStatus && error.passwordError) && <div className='error_message'>{error.passwordError}</div>}
+            <div className="form-group">
+              <label htmlFor='password'>Password:</label>
+              <input onChange={e => paswwordHandler(e)} onBlur={e => bluerHubdler(e)} type="password" name="password" id='password' placeholder='Enter password'/>
+            </div>
+            <div className="form-group">
+            {(placeholderStatus.repeatPasswordStatus && error.repeatPasswordError) && <div className='error_message'>{error.repeatPasswordError}</div>}
+              <label htmlFor='repeat-password'>Repeat Password:</label>
+              <input onChange={e => repeatPasswordHandler(e)} onBlur={e => bluerHubdler(e)} type="password" name="repeat-password" id='repeat-password' placeholder='Repeat password'/>
+            </div>
+            <button disabled={!formValid} type='submit' className='btn'>REGISTARTION</button>
           </div>
-          {(placeholderStatus.firstNameStatus && error.firstNameError) && <div className='error_message'>{error.firstNameError}</div>}
-          <div className="form-group">
-            <label htmlFor='first-name'>First name:</label>
-            <input onChange={e => firstNameHandler(e)}  onBlur={e => bluerHubdler(e)} type="text" name="first-name" id='first-name' placeholder='Enter first name'/>
-          </div>
-          {(placeholderStatus.secondNameStatus && error.secondNameError) && <div className='error_message'>{error.secondNameError}</div>}
-          <div className="form-group">
-            <label htmlFor='second-name'>Second name:</label>
-            <input onChange={e => secondNameHandler(e)} onBlur={e => bluerHubdler(e)} type="text" name="second-name" id='second-name' placeholder='Enter second name'/>
-          </div>
-          {(placeholderStatus.passwordStatus && error.passwordError) && <div className='error_message'>{error.passwordError}</div>}
-          <div className="form-group">
-            <label htmlFor='password'>Password:</label>
-            <input onChange={e => paswwordHandler(e)} onBlur={e => bluerHubdler(e)} type="password" name="password" id='password' placeholder='Enter password'/>
-          </div>
-          <div className="form-group">
-          {(placeholderStatus.repeatPasswordStatus && error.repeatPasswordError) && <div className='error_message'>{error.repeatPasswordError}</div>}
-            <label htmlFor='repeat-password'>Repeat Password:</label>
-            <input onChange={e => repeatPasswordHandler(e)} onBlur={e => bluerHubdler(e)} type="password" name="repeat-password" id='repeat-password' placeholder='Repeat password'/>
-          </div>
-          <button disabled={!formValid} type='submit'>REGISTARTION</button>
         </div>
     </form>
   );

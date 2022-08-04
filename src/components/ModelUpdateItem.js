@@ -48,7 +48,7 @@ function ModelUpdateItem({id, closeModal, status}) {
   return (
     <div className='modalBackground'>
         <div className='modalContainer'>
-            
+            <div className='form-modal-edit'>
             <div className='title-color'>
                 <p>Update Certificate</p>
             </div>
@@ -104,6 +104,7 @@ function ModelUpdateItem({id, closeModal, status}) {
                     </div>
                 </div>
             
+            </div>
             </div>
             <div>
                 <span className='footer-for-padding'></span>

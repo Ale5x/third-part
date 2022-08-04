@@ -36,8 +36,9 @@ function LoginForm({Login, error}) {
     
     }
 
-     return (<form onSubmit={submitHandler}>
-        <div className="form-inner">
+     return (<form onSubmit={submitHandler} className='form-position'>
+        <div className='position-centr'>
+            <div className="form-inner">
             <h2>Login</h2>
             {(error != "") ? (<div className="error">{error}</div>) : ""}
             <div className="form-group">
@@ -48,9 +49,11 @@ function LoginForm({Login, error}) {
                 <label htmlFor="password">Password:</label>
                 <input type="password" name="password" id="password" onChange={e => setDetails({...details, password: e.target.value})} value={details.password}></input>
             </div>
-            <input type="submit" value="LOGIN"></input>
+            <input type="submit" value="LOGIN" className="btn"></input>
+            </div>
         </div>
     </form>)
+        
 }
 
 export default LoginForm
