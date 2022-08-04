@@ -7,19 +7,18 @@ function LoginForm({Login, error}) {
     const body = { useremail: details.email,
                    password: details.password};
     const headers = {
-        "Access-Control-Allow-Origin": "*",
-        "Accept": "*/*",
+        'Access-Control-Allow-Credentials':true,
         'Content-Type': 'application/json'
         }
 
     const submitHandler = e => {
         e.preventDefault();
+        console.log("START LOGINATION")
         //localhost:8080/login
-        axios.post("http://localhost:8080/login", {
-            
-                // "headers": headers,
-                "body": body
-        })
+        axios.get("http://localhost:8080/store/tag/get?id=5", {
+            useremail: details.email,
+            password: details.password}, {headers}
+        )
         .then(response => {
             if(response.status == 200) {
                 console.log("LOGINATION SUCCESSFUL");
@@ -27,7 +26,7 @@ function LoginForm({Login, error}) {
                 console.log("LOGINATION NO SUCCESSFUL");
             }
             console.log("BODY", JSON.stringify(body))
-            console.log("response", response)
+            console.log("response status", response.status)
         })
         
         console.log("BODY", JSON.stringify(body))

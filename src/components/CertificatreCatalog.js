@@ -10,8 +10,8 @@ import product_card from "../data/data-content";
 
 
 function CertificatreCatalog() {
-    const [items, setItems] = useState(product_card._embedded.giftCertificateDtoList);
-    // const [items, setItems] = useState([]);
+    // const [items, setItems] = useState(product_card._embedded.giftCertificateDtoList);
+    const [items, setItems] = useState([]);
     const [viewItem, setViewItem] = useState(0);
     const [editItem, setEditItem] = useState(0);
     const [openModalDelete, setOpenModalDelete] = useState(false);

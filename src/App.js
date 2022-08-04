@@ -28,7 +28,7 @@ function App() {
       <Route path='registration' element={<RegistartionForm/>}/>
       <Route path='certificate-catalog' element={<CertificatreCatalog/>}/>
     </Routes>
-    <Footer/>
+    {/* <Footer/> */}
   </Router>
   );
 }
