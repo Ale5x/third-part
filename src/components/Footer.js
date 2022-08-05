@@ -5,6 +5,7 @@ export default function Footer() {
     <div className='footer'>
         <div className='content'>
           <div className='footer-logo'>copyright 2022</div>
+          <div className='footer-author'>Alexander</div>
           <div className='social'>
               <ui className='social-content'>
                 <li>FaceBook</li>

@@ -10,8 +10,8 @@ import product_card from "../data/data-content";
 
 
 function CertificatreCatalog() {
-    // const [items, setItems] = useState(product_card._embedded.giftCertificateDtoList);
-    const [items, setItems] = useState([]);
+    const [items, setItems] = useState(product_card._embedded.giftCertificateDtoList);
+    // const [items, setItems] = useState([]);
     const [viewItem, setViewItem] = useState(0);
     const [editItem, setEditItem] = useState(0);
     const [openModalDelete, setOpenModalDelete] = useState(false);
@@ -24,7 +24,7 @@ function CertificatreCatalog() {
     
     const [id, setId] = useState(0);
     const pages = [1, 2, 3, 4, 5];
-    const [message, setMessage] = useState("Test message");
+    const [message, setMessage] = useState("Test message    http://localhost:8080/store/certificate/allSortReverseDate?size=${countItems}&page=${currentPage}");
     let initUrl = "";
     // const [countItems, setCountItems] = useState((sessionStorage.getItem('countItems') === null) ? 10 : sessionStorage.getItem('countItems'))
     const [countItems, setCountItems] = useState(10);
@@ -152,43 +152,50 @@ function CertificatreCatalog() {
         }
     }
 
+    const jumpPage = (e) => {
+        if(e.target.value != "") {
+            setCurrentPage(e.target.value);
+        }
+        setFetching(true);
+    }
+
 
     useEffect(() => {
         let url = ""
         if(fetching) {
-           if(nameValue !== "") {
-            axios.get(`http://localhost:8080/store/certificate/getCertificatesByPartName?size=10&page=${currentPage}&name=${nameValue}`)
-            .then(response => {
-                setItems([...response.data._embedded.giftCertificateDtoList]);
-            })
-            .finally(() => 
-            setFetching(false));
-           } else {
+        //    if(nameValue !== "") {
+        //     axios.get(`http://localhost:8080/store/certificate/getCertificatesByPartName?size=10&page=${currentPage}&name=${nameValue}`)
+        //     .then(response => {
+        //         setItems([...response.data._embedded.giftCertificateDtoList]);
+        //     })
+        //     .finally(() => 
+        //     setFetching(false));
+        //    } else {
            
-            if(typeStatus.typeSortDate) {
-                url = `http://localhost:8080/store/certificate/allSortDate?size=${countItems}&page=${currentPage}`;
-            } else if(typeStatus.typeReverseSortDate) {
-                url = `http://localhost:8080/store/certificate/allSortReverseDate?size=${countItems}&page=${currentPage}`;
-            } else {
-                url = `http://localhost:8080/store/certificate/getAllCertificates?size=${countItems}&page=${currentPage}`;
-                console.log("TYPE OUTPUT AND SET URL");
-                setUrl(url);
-            }
+        //     if(typeStatus.typeSortDate) {
+        //         url = `http://localhost:8080/store/certificate/allSortDate?size=${countItems}&page=${currentPage}`;
+        //     } else if(typeStatus.typeReverseSortDate) {
+        //         url = `http://localhost:8080/store/certificate/allSortReverseDate?size=${countItems}&page=${currentPage}`;
+        //     } else {
+        //         url = `http://localhost:8080/store/certificate/getAllCertificates?size=${countItems}&page=${currentPage}`;
+        //         console.log("TYPE OUTPUT AND SET URL");
+        //         setUrl(url);
+        //     }
 
-            axios.get(url)
-            .then(response => {
-                setItems([...response.data._embedded.giftCertificateDtoList]);
-            })
-            .finally(() => 
-            setFetching(false));
-           }
+        //     axios.get(url)
+        //     .then(response => {
+        //         setItems([...response.data._embedded.giftCertificateDtoList]);
+        //     })
+        //     .finally(() => 
+        //     setFetching(false));
+        //    }
         }
         console.log("TEST ITEM", items)
     }, [fetching])
 
 
   return (
-    <div>
+    <div className='certificate-catalog-content'>
         <div className='addBtn'>
             <button onClick={() => setOpenModalAddItem(true)} className='btn-add'>Add new Certificate</button>
         </div>
@@ -200,9 +207,13 @@ function CertificatreCatalog() {
             {openModalAddItem && <ModelAddItem closeModal={setOpenModalAddItem} error={setMessage}/>}
         </div>
         <div>
+        {(message != "") ? (
             <div className='message'>
-                <h1>{(message != "") ? message : ""}</h1>
+                
+                <button onClick={() => setMessage("")}>X</button>
+                <h1>message</h1>
             </div>
+        ) : ("")}
         </div>
         
         <div className='search-content'>
@@ -271,8 +282,9 @@ function CertificatreCatalog() {
                     </span>
                 </span>
             </div>
-            <div>
-                <span className='footer-for-padding'></span>
+            <div className='jump-page'>
+                <span>Jump page</span>
+                <input type='number' min='1' onChange={jumpPage}></input>
             </div>
         </div>
     </div>

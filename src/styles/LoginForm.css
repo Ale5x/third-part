@@ -27,6 +27,7 @@
 .form-position {
     display: block;
     position: relative;
+    z-index: 5;
 }
 
 .form-position:after {

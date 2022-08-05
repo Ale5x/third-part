@@ -16,11 +16,11 @@
 .logo {
     font-size: 30px;
     text-transform: uppercase;
+    margin-left: 15px;
 } 
 
 .header nav {
     display: flex;
-    justify-content: center;
     align-items: center;
 
     justify-content: space-between;

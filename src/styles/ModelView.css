@@ -44,13 +44,17 @@
 .titleCloseBtn {
     display: flex;
     justify-content: flex-end;
+    position: relative;
+    left: 49%;
+    right: auto;
+    font-size: 25px;
+    cursor: pointer;
 }
 
 .titleCloseBtn button{
     background-color: transparent;
     border: none;
-    font-size: 25px;
-    cursor: pointer;
+
 }
 
 .modalContainer .body-modal {
@@ -93,9 +97,11 @@
     margin-bottom: 10px; 
 } 
 
-.form-modal-edit, .form-modal-add {
+.form-modal-edit, .form-modal-add{
     width: 900px;
 }
+
+
 
 
 
