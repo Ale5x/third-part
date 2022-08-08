@@ -20,14 +20,21 @@ import AdminHeader from './components/AdminHeader'
 import Test from './components/Test'
 import TestModel from './components/TestModel'
 
-
+import React, {useState, useEffect} from 'react'
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 
 
 function App() {
+  
+  const [reloadStatus, setReloadStatus] = useState(true);
+  
+  useEffect(() => {
+    // window.location.reload();
+    setReloadStatus(false);
+  }, [reloadStatus])
   return (
     <div>
-      <Router>
+      {/* <Router>
         <Header/>
         <Routes>
           <Route path='t' element={<Test/>}/>
@@ -43,11 +50,13 @@ function App() {
           <Route path='error-page-404' element={<ErrorPage404/>}/>
           <Route path='certificate-catalog' element={<CertificatreCatalog/>}/>
         </Routes>
-      </Router>
+      </Router> */}
 
 
-      {/* <Router>
-        <Header/>
+      <Router>
+        {(localStorage.getItem("roles") === "[ADMIN]") ?
+         (<AdminHeader/>) : (<Header/>)}
+        
         <Routes>
           <Route path='/' element={<MainContent/>}/>
           <Route path='error-page-server' element={<ErrorPage/>}/>
@@ -58,7 +67,7 @@ function App() {
           <Route path='certificate-catalog' element={<CertificatreCatalog/>}/>
         </Routes> 
         <Footer/>
-      </Router> */}
+      </Router>
     </div>
     
   );

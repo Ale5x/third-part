@@ -23,6 +23,7 @@ function ModelViewItem({id, closeModal}) {
                 setItem({
                   giftCertificateDtoId: response.data.giftCertificateDtoId,
                   name: response.data.name,
+                  price: response.data.price,
                   tags: response.data.tags,
                   duration: response.data.duration,
                   createDate: response.data.createDate,

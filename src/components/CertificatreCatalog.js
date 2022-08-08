@@ -13,7 +13,7 @@ import { useNavigate  } from 'react-router-dom';
 function CertificatreCatalog() {
     let url = "";
     const navigate = useNavigate();
-    // const [items, setItems] = useState(product_card._embedded.giftCertificateDtoList);
+    const [urlCertificateLocal, setUrlCertificateLocal] = useState("");
     const [items, setItems] = useState([]);
     const [viewItem, setViewItem] = useState(0);
     const [editItem, setEditItem] = useState(0);
@@ -28,7 +28,7 @@ function CertificatreCatalog() {
     const [countItemsInServerByPartName, setCountItemsInServerByPartName] = useState(0);
     const [id, setId] = useState(0);
     const pages = [1, 2, 3, 4, 5];
-    const [message, setMessage] = useState("Test message    http://localhost:8080/store/certificate/allSortReverseDate?size=${countItems}&page=${currentPage}");
+    const [message, setMessage] = useState("");
     let initUrl = "";
     // const [countItems, setCountItems] = useState((sessionStorage.getItem('countItems') === null) ? 10 : sessionStorage.getItem('countItems'))
     const [countItems, setCountItems] = useState(10);
@@ -44,6 +44,10 @@ function CertificatreCatalog() {
     // const [url, setUrl] = useState("")
     const [loaderStatus, setLoaderStatus] = useState(true);
 
+    const headers = { 
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem("access_token")
+    };
 
     const typeOutputItems = () => {
         const select = document.getElementById("type-out");
@@ -83,10 +87,26 @@ function CertificatreCatalog() {
                 setCountItems(100);
                 break;
             default:
-                console.log("DEFAULT count TYPE")
                 setCountItems(10);
         }
+        setFetchingCountItems(true);
+        setFetchingCountItemsByName(true);
+
+        if(nameValue != ""){
+            if((countItems * currentPage) < countItemsInServerByPartName) {
+                setCurrentPage(1);
+            }
+        } else{
+            if((countItems * currentPage) < countItemsInServer) {
+                
+                setCurrentPage(1);
+            }
+        }
+        console.log("(countItems * currentPage) > countItemsInServer -------", (countItems * currentPage) > countItemsInServer);
+        console.log("(countItems * currentPage)", (countItems * currentPage));
+        console.log("countItemsInServer", countItemsInServer);
         console.log("setCountItems", countItems);
+        console.log("CURRENT PAGE", currentPage);
         setFetching(true)
     }
 
@@ -134,69 +154,31 @@ function CertificatreCatalog() {
         }
     }
 
-    const ModalMessag = status => {
-        if(status) {
-            setMessage(`Item with id: ${id} deleted`);
-            setId(0);
-            setOpenModalDelete(false);
-            setFetching(true);
-        } else {
-            setOpenModalDelete(false);
-            setMessage("");
-            console.log("set ID 0");
-            setId(0);
-        }
-    }
-
-    const ModalMessagUpdate = status => {
-        /*
-        // if(status) {
-        //     setMessage(`Item with id: ${id} updated successfully`);
-        //     setEditItem(0);
-        //     setOpenModalEditItem(false);
-        //     setFetching(true);
-        // } else {
-        //     setOpenModalEditItem(false);
-        //     setMessage(`Item with id: ${id} is not updated. Error`);
-        //     console.log("set ID 0");
-        //     setEditItem(0);
-        // }
-        */
-    }
-
     const jumpPage = (e) => {
+        let countCertificates = 1;
+        setFetchingCountItems(true);
+        setFetchingCountItemsByName(true);
         if(e.target.value != "") {
-
             if(nameValue !== "") {
-                setFetchingCountItemsByName(true);
-                console.log("countItemsInServerByPartName", countItemsInServerByPartName)
-                if((e.target.value * countItems) < countItemsInServerByPartName) {
-                    setCurrentPage(e.target.value);
-                } else {
-                    setCurrentPage((countItemsInServerByPartName / countItems).toFixed(0));
-                }
+                countCertificates = countItemsInServerByPartName;
             } else {
-                setFetchingCountItems(true);
-                
-                if((e.target.value * countItems) < countItemsInServer) {
-                    setCurrentPage(e.target.value);
-                } else {
-                    setCurrentPage((countItemsInServer / countItems));
-                }
+                countCertificates = countItemsInServer;
             }
-        
         }
+   
+        if(e.target.value * countItems < countCertificates) {
+            setCurrentPage(e.target.value);
+        } else {
+            let page = 1;
+            while((page * countItems) <= countCertificates) {
+                page++;
+            }
+            page--;
+            setCurrentPage(page);
+        }
+        
         setFetching(true);
     }
-
-
-    // useEffect(() => {
-    //     if (message != "") {
-    //         console.log("useEffect check message")
-    //         setFetching(true);
-    //     }
-    // })
-
 
     useEffect(() => {
         if(fetching) {
@@ -216,8 +198,10 @@ function CertificatreCatalog() {
             } else {
                 url = `http://localhost:8080/store/certificate/getAllCertificates?size=${countItems}&page=${currentPage}`;
             }
-
-            axios.get(url)
+            console.log("TYPESTATUS", typeStatus)
+            localStorage.setItem("urlCertificateLocal", url);
+            console.log("URL FROM LOCAL STORED", localStorage.getItem("urlCertificateLocal"))
+            axios.get(url, {headers})
             .then(response => {
                 setItems([...response.data._embedded.giftCertificateDtoList]);
             })
@@ -230,7 +214,7 @@ function CertificatreCatalog() {
     useEffect(() => {
         if(nameValue != "") {
             setFetchingCountItems(true)
-            axios.get(`http://localhost:8080/store/certificate/getCountCertificatesByPartName?size=${countItemsInServer}&name=${nameValue}&page=1`)
+            axios.get(`http://localhost:8080/store/certificate/getCountCertificatesByPartName?size=${countItemsInServer}&name=${nameValue}&page=1`, {headers})
                 .then(response => {
                     setCountItemsInServerByPartName(response.data);
                 })
@@ -256,7 +240,7 @@ function CertificatreCatalog() {
     }, [fetchingCountItemsByName]);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/store/certificate/getCountCertificates')
+        axios.get('http://localhost:8080/store/certificate/getCountCertificates', {headers})
         .then(response => {
             setCountItemsInServer(response.data);
         })
@@ -369,7 +353,7 @@ function CertificatreCatalog() {
             </div>
             <div className='jump-page'>
                 <span>Jump page</span>
-                <input type='number' min='1' onChange={jumpPage}></input>
+                <input type="number" min="1" onChange={jumpPage}></input>
             </div>
         </div>
     </div>

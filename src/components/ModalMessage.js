@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useNavigate  } from 'react-router-dom';
 import axios from 'axios';
 
@@ -14,20 +14,18 @@ function ModalMessage({message, closeModal, id, status}) {
 
     const deleteItem = () => {
         console.log("Starting deleting")
-        axios.delete(`http://localhost:8080/store/certificate/delete?id=${id}`, {
-                idS: id 
-            }, 
+        axios.delete(`http://localhost:8080/store/certificate/delete?id=${id}`, 
             {headers}
             )
         .then(response => {
-            console.log("RESPONSE", response)
             if(response.status === 200){
-                message("The certificate was deleted successfully!");
+                message(`The certificate with ${id} was deleted successfully!`);
             }
         })
         .catch(error => {
             console.log("error", error)
             if(error.response.status === 400) {
+                message(`Error while deleting certificate ID:${id}` + error.response.data.message);
                 // setError(error.response.data.message);
             } else {
                 navigate("/error-page-server");
@@ -38,6 +36,7 @@ function ModalMessage({message, closeModal, id, status}) {
             closeModal(false);
         })
     }
+
 
 
   return (

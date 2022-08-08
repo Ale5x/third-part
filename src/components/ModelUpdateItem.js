@@ -58,14 +58,12 @@ function ModelUpdateItem({id, closeModal, status, message}) {
         {headers}
       )
       .then(response => {
-        console.log("response", response)
-        if(response.status === 201){
-          message("The certificate was updated successfully!");
+        if(response.status === 200){
+          message(`The certificate with ID:${id} was updated successfully!`);
           closeModal(false);
         }
       })
       .catch(error => {
-        console.log("ERROR", error)
         if(error.response.status === 400) {
           setError(error.response.data.message);
         } else {

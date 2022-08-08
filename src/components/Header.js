@@ -6,9 +6,8 @@ import LoginForm from './LoginForm'
 
 export default function Header() {
   const navigate = useNavigate();
+ 
   
-  console.log("TOKENS - access_token", localStorage.getItem("access_token"))
-  console.log("TOKENS - refresh_token", localStorage.getItem("refresh_token"))
 
   const Logout = () => {
     console.log("Logout");
@@ -34,8 +33,8 @@ export default function Header() {
           <div className='logination'>
             {(localStorage.getItem("access_token") === null || localStorage.getItem("access_token") == "") ? (
               <ui>
-                <li>Sing in</li>
-                <li>Sign out</li>
+                <li onClick={() => navigate("login")}>Sing in</li>
+                <li onClick={() => navigate("registration")}>Sign up</li>
               </ui>
             ) : (
               <ui>

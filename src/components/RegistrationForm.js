@@ -9,12 +9,12 @@ function RegistartionForm() {
   const [user, setUser] = useState({email: "", firstName: "", secondName: "", password: "", repeatPassword: ""});
   const [placeholderStatus, setPlaceholderStatus] = useState({emailStatus: false, firstNameStatus: false, 
     secondNameStatus: false, passwordStatus: false, repeatPasswordStatus: false});
-  const [error, setError] = useState({errorMessage: "Fields cannot be empty.",
-                                        emailError: "Email cannot be empty", 
-                                        firstNameError: "First name cannot be empty", 
-                                        secondNameError: "Second name be empty",  
-                                        setPasswordError: "Password cannot be empty", 
-                                        repeatPasswordError: "Passwords do not match"});
+  const [error, setError] = useState({errorMessage: "",
+                                        emailError: "", 
+                                        firstNameError: "", 
+                                        secondNameError: "",  
+                                        setPasswordError: "", 
+                                        repeatPasswordError: ""});
 
 
   const [formValid, setFormValid] = useState(false);
@@ -28,21 +28,13 @@ function RegistartionForm() {
             setError({errorMessage: ""});
            
     } else {
-        checkPassword();
-        setError({errorMessage: "Fields cannot be empty."});
+        if(!(user.password === user.repeatPassword) && user.password !== "") {
+          setError({errorMessage: "Passwords do not match"});
+        }
         setFormValid(false);
     }
   }, [error.emailError, error.firstNameError, error.secondNameError, error.passwordError, error.repeatPasswordError])
 
-  function checkPassword() {
-    if(user.password === user.repeatPassword) {
-        setFormValid(true);
-    } else {
-        placeholderStatus.repeatPasswordStatus = false;
-        setError({repeatPasswordError: "Passwords do not match"});
-        setFormValid(false);
-    } 
-  }
 
   const emailHandler = (e) => {
     const REGEX_EMAIL = "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}\\b";
@@ -115,8 +107,33 @@ function RegistartionForm() {
 
   const submitHandler = e => {
     e.preventDefault();
-    console.log("User details", user);
-    createUser();
+
+    console.log("user", user)
+    console.log("user.password === user.repeatPassword", user.password === user.repeatPassword)
+    console.log("CHECK", user.email === "" || user.secondName === "" || user.firstName === "" || user.password === "" || user.repeatPassword === "")
+    if(user.email === "" || user.secondName === "" || user.firstName === "" || user.password === "" || user.repeatPassword === "") {
+      setError({errorMessage: "Fields cannot be empty."});
+    } else {
+      if(user.password === user.repeatPassword) {
+        createUser();
+      } else {
+        setError({errorMessage: "Passwords do not match."});
+      }
+      
+    }
+  }
+  const registration = () => {
+    // console.log("registration")
+    // if(user.email === "" || user.secondName === "" || user.firstName === "" || user.password === "" || user.repeatPassword === "") {
+    //   setError({errorMessage: "Fields cannot be empty."});
+    // } else {
+    //   if(user.password === user.repeatPassword) {
+    //     createUser();
+    //   } else {
+    //     setError({errorMessage: "Passwords do not match."});
+    //   }
+      
+    // }
   }
 
 const headers = {
@@ -140,8 +157,16 @@ const createUser = () => {
         setOpenModelRegistrationMessage(true);
       }})
         .catch(error => {
-          setMessage(`Registration failed. The data is incorrect... The reason: ${error.response.data.message}`);
-          setOpenModelRegistrationMessage(true);
+          
+          axios.get(`http://localhost:8080/store/user/existUser?email=${user.email}`)
+                .then(response => {
+                    if(response.status === 200) {
+                        setError({errorMessage: "Email busy"});
+                    }
+                })
+                .catch(error => {
+                    setError("User not found.")
+                })
         })
 }
 
@@ -180,7 +205,7 @@ return (
               <input onChange={e => repeatPasswordHandler(e)} onBlur={e => bluerHubdler(e)} type="password" name="repeat-password" id='repeat-password' placeholder='Repeat password' max='120'/>
             </div>
             <div className='position-btn'>
-              <button disabled={!formValid} type='submit' className='btn'>REGISTARTION</button>
+              <button disabled={!formValid} type='submit' className='btn' onChange={registration}>REGISTARTION</button>
               <button onClick={() => navigate("/")} type='submit' className='cancel-btn'>CANCEL</button>
             </div>
           </div>

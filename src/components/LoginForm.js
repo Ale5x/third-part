@@ -14,7 +14,7 @@ import { useNavigate  } from 'react-router-dom';
     const submitHandler = e => {
         e.preventDefault();
 
-        axios.post("http://localhost:8080/login1", {
+        axios.post("http://localhost:8080/login", {
                 email: details.useremail,
                 password: details.password,
             }, 
@@ -23,22 +23,22 @@ import { useNavigate  } from 'react-router-dom';
                if(response.status === 200){
                     localStorage.setItem("access_token", response.data.access_token)
                     localStorage.setItem("refresh_token", response.data.refresh_token)
-                    console.log("roles", response.data.roles);
+                    localStorage.setItem("roles", response.data.roles)
+                    
                     navigate("/");
                 }
             }
             )
-        .catch(() => {
-
+        .catch((e) => {
+            console.log("ERROR FOR e", e)
             axios.get(`http://localhost:8080/store/user/existUser?email=${details.useremail}`)
                 .then(response => {
-                console.log("CHECK EMAIL RESPONSE")
                     if(response.status === 200) {
-                        console.log("EMAIL EXIST Invalid password")
                         setError("Invalid password.")
                     }
                 })
                 .catch(error => {
+                    console.log("ERROR FOR LOGIN", error)
                     setError("User not found.")
                 })
         })

@@ -4,7 +4,6 @@ import { useNavigate  } from 'react-router-dom';
 function AdminHeader() {
     const navigate = useNavigate();
 
-    localStorage.setItem("access_token", "test value")
     console.log("LOOK", localStorage.getItem("access_token"))
 
     const Logout = () => {
