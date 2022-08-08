@@ -5,13 +5,16 @@ import ModelViewItem from './ModelViewItem';
 import ModelAddItem from './ModelAddItem';
 import ModelUpdateItem from './ModelUpdateItem';
 import product_card from "../data/data-content";
+import { useNavigate  } from 'react-router-dom';
 
 
 
 
 function CertificatreCatalog() {
-    const [items, setItems] = useState(product_card._embedded.giftCertificateDtoList);
-    // const [items, setItems] = useState([]);
+    let url = "";
+    const navigate = useNavigate();
+    // const [items, setItems] = useState(product_card._embedded.giftCertificateDtoList);
+    const [items, setItems] = useState([]);
     const [viewItem, setViewItem] = useState(0);
     const [editItem, setEditItem] = useState(0);
     const [openModalDelete, setOpenModalDelete] = useState(false);
@@ -21,7 +24,8 @@ function CertificatreCatalog() {
     const [lastPage, setLastPage] = useState(50);
     const [dispatch, setDispatch] = useState();
     const [typeStatus, setTypeStatus] = useState({typeDefault: true, typeSortDate: false, typeReverseSortDate: false})
-    
+    const [countItemsInServer, setCountItemsInServer] = useState(0);
+    const [countItemsInServerByPartName, setCountItemsInServerByPartName] = useState(0);
     const [id, setId] = useState(0);
     const pages = [1, 2, 3, 4, 5];
     const [message, setMessage] = useState("Test message    http://localhost:8080/store/certificate/allSortReverseDate?size=${countItems}&page=${currentPage}");
@@ -30,12 +34,15 @@ function CertificatreCatalog() {
     const [countItems, setCountItems] = useState(10);
     const [defaultCountItems, setDefaultCountItems] = useState(10)
     const [fetching, setFetching] = useState(true);
+    const [fetchingCountItems, setFetchingCountItems] = useState(true);
+    const [fetchingCountItemsByName, setFetchingCountItemsByName] = useState(false);
     const [nameValue, setSeacrhValue] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [currentPageForName, setCurrentPageForName] = useState(1);
     let defUrl = `http://localhost:8080/store/certificate/getAllCertificates?size=${countItems}&page=${currentPage}`
     const [defaultUrl, setDefaultUrl] = useState(defUrl);
-    const [url, setUrl] = useState("")
+    // const [url, setUrl] = useState("")
+    const [loaderStatus, setLoaderStatus] = useState(true);
 
 
     const typeOutputItems = () => {
@@ -78,7 +85,6 @@ function CertificatreCatalog() {
             default:
                 console.log("DEFAULT count TYPE")
                 setCountItems(10);
-                console.log("DEFAULT TYPE / URL", url)
         }
         console.log("setCountItems", countItems);
         setFetching(true)
@@ -102,7 +108,7 @@ function CertificatreCatalog() {
     }
 
     const acctionViewItem = (e) => {
-        console.log("ITEM ID", e.target.value);
+        console.log("ITEM ID", e);
         setViewItem(e.target.value);
         setOpenModalViewItem(true);
     }
@@ -113,8 +119,12 @@ function CertificatreCatalog() {
     }
 
     const navigationNextPage = () => {
-        setCurrentPage(currentPage => currentPage + 1);
+        if(currentPage * countItems <= countItemsInServer) {
+            console.log("CURRENT PAGE", currentPage + 1)
+            setCurrentPage(currentPage => currentPage + 1);
         setFetching(true);
+        }
+        
     }
 
     const navigationPrevPage = () => {
@@ -139,60 +149,135 @@ function CertificatreCatalog() {
     }
 
     const ModalMessagUpdate = status => {
-        if(status) {
-            setMessage(`Item with id: ${id} updated successfully`);
-            setEditItem(0);
-            setOpenModalEditItem(false);
-            setFetching(true);
-        } else {
-            setOpenModalEditItem(false);
-            setMessage(`Item with id: ${id} is not updated. Error`);
-            console.log("set ID 0");
-            setEditItem(0);
-        }
+        /*
+        // if(status) {
+        //     setMessage(`Item with id: ${id} updated successfully`);
+        //     setEditItem(0);
+        //     setOpenModalEditItem(false);
+        //     setFetching(true);
+        // } else {
+        //     setOpenModalEditItem(false);
+        //     setMessage(`Item with id: ${id} is not updated. Error`);
+        //     console.log("set ID 0");
+        //     setEditItem(0);
+        // }
+        */
     }
 
     const jumpPage = (e) => {
         if(e.target.value != "") {
-            setCurrentPage(e.target.value);
+
+            if(nameValue !== "") {
+                setFetchingCountItemsByName(true);
+                console.log("countItemsInServerByPartName", countItemsInServerByPartName)
+                if((e.target.value * countItems) < countItemsInServerByPartName) {
+                    setCurrentPage(e.target.value);
+                } else {
+                    setCurrentPage((countItemsInServerByPartName / countItems).toFixed(0));
+                }
+            } else {
+                setFetchingCountItems(true);
+                
+                if((e.target.value * countItems) < countItemsInServer) {
+                    setCurrentPage(e.target.value);
+                } else {
+                    setCurrentPage((countItemsInServer / countItems));
+                }
+            }
+        
         }
         setFetching(true);
     }
 
 
-    useEffect(() => {
-        let url = ""
-        if(fetching) {
-        //    if(nameValue !== "") {
-        //     axios.get(`http://localhost:8080/store/certificate/getCertificatesByPartName?size=10&page=${currentPage}&name=${nameValue}`)
-        //     .then(response => {
-        //         setItems([...response.data._embedded.giftCertificateDtoList]);
-        //     })
-        //     .finally(() => 
-        //     setFetching(false));
-        //    } else {
-           
-        //     if(typeStatus.typeSortDate) {
-        //         url = `http://localhost:8080/store/certificate/allSortDate?size=${countItems}&page=${currentPage}`;
-        //     } else if(typeStatus.typeReverseSortDate) {
-        //         url = `http://localhost:8080/store/certificate/allSortReverseDate?size=${countItems}&page=${currentPage}`;
-        //     } else {
-        //         url = `http://localhost:8080/store/certificate/getAllCertificates?size=${countItems}&page=${currentPage}`;
-        //         console.log("TYPE OUTPUT AND SET URL");
-        //         setUrl(url);
-        //     }
+    // useEffect(() => {
+    //     if (message != "") {
+    //         console.log("useEffect check message")
+    //         setFetching(true);
+    //     }
+    // })
 
-        //     axios.get(url)
-        //     .then(response => {
-        //         setItems([...response.data._embedded.giftCertificateDtoList]);
-        //     })
-        //     .finally(() => 
-        //     setFetching(false));
-        //    }
+
+    useEffect(() => {
+        if(fetching) {
+           if(nameValue !== "") {
+            axios.get(`http://localhost:8080/store/certificate/getCertificatesByPartName?size=10&page=${currentPage}&name=${nameValue}`)
+            .then(response => {
+                setItems([...response.data._embedded.giftCertificateDtoList]);
+            })
+            .finally(() => 
+            setFetching(false));
+           } else {
+           
+            if(typeStatus.typeSortDate) {
+                url = `http://localhost:8080/store/certificate/allSortDate?size=${countItems}&page=${currentPage}`;
+            } else if(typeStatus.typeReverseSortDate) {
+                url = `http://localhost:8080/store/certificate/allSortReverseDate?size=${countItems}&page=${currentPage}`;
+            } else {
+                url = `http://localhost:8080/store/certificate/getAllCertificates?size=${countItems}&page=${currentPage}`;
+            }
+
+            axios.get(url)
+            .then(response => {
+                setItems([...response.data._embedded.giftCertificateDtoList]);
+            })
+            .finally(() => 
+            setFetching(false));
+           }
         }
-        console.log("TEST ITEM", items)
     }, [fetching])
 
+    useEffect(() => {
+        if(nameValue != "") {
+            setFetchingCountItems(true)
+            axios.get(`http://localhost:8080/store/certificate/getCountCertificatesByPartName?size=${countItemsInServer}&name=${nameValue}&page=1`)
+                .then(response => {
+                    setCountItemsInServerByPartName(response.data);
+                })
+                .catch(e => {
+                    console.log("ERRORRRR", e)
+                    if(e.response.status === 404) {
+                        navigate("/error-page-404")
+                    }else {
+                        navigate("/error-page-server")
+                    }
+                })
+                .finally(() => {
+                    setFetchingCountItemsByName(false);
+                })
+
+        if((currentPage * countItems) < countItemsInServerByPartName) {
+            setLoaderStatus(true);
+        } else {
+            setLoaderStatus(false);
+        }
+        }
+        
+    }, [fetchingCountItemsByName]);
+
+    useEffect(() => {
+        axios.get('http://localhost:8080/store/certificate/getCountCertificates')
+        .then(response => {
+            setCountItemsInServer(response.data);
+        })
+        .catch(e => {
+            if(e.response.status === 404) {
+                navigate("/error-page-404")
+            }else {
+                navigate("/error-page-server")
+            }
+        })
+        .finally(() => {
+            setFetchingCountItems(false);
+        })
+
+        if((currentPage * countItems) < countItemsInServer) {
+            setLoaderStatus(true);
+        } else {
+            setLoaderStatus(false);
+        }
+        
+    }, [fetchingCountItems]);
 
   return (
     <div className='certificate-catalog-content'>
@@ -201,17 +286,17 @@ function CertificatreCatalog() {
         </div>
         <div className='main-content'>
         <div>
-            {openModalDelete && <ModalMessage ModalMessag = {ModalMessag} id={id}/>}
+            {openModalDelete && <ModalMessage message = {setMessage} closeModal={setOpenModalDelete} id={id} status={setFetching}/>}
             {openModalViewItem && <ModelViewItem id={viewItem} closeModal={setOpenModalViewItem}/>}
-            {openModalEditItem && <ModelUpdateItem id={editItem} closeModal={setOpenModalEditItem} status={ModalMessagUpdate}/>}
-            {openModalAddItem && <ModelAddItem closeModal={setOpenModalAddItem} error={setMessage}/>}
+            {openModalEditItem && <ModelUpdateItem id={editItem} closeModal={setOpenModalEditItem} status={setFetching} message={setMessage}/>}
+            {openModalAddItem && <ModelAddItem closeModal={setOpenModalAddItem} message={setMessage} status={setFetching}/>}
         </div>
         <div>
         {(message != "") ? (
             <div className='message'>
                 
                 <button onClick={() => setMessage("")}>X</button>
-                <h1>message</h1>
+                <h1>{message}</h1>
             </div>
         ) : ("")}
         </div>

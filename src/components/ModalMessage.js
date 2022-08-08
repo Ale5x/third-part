@@ -1,24 +1,56 @@
-import React from 'react'
+import React from 'react';
+import { useNavigate  } from 'react-router-dom';
+import axios from 'axios';
 
 
-function ModalMessage({ModalMessag, id}) {
- 
-    const status = (e) => {
-        console.log("MODAL  STATUS", e)
-        console.log("MODAL  ID", id)
-        ModalMessag(e)
+function ModalMessage({message, closeModal, id, status}) {
+    const navigate = useNavigate();
+    const headers = { 
+        "Access-Control-Allow-Origin": "*",
+        'Access-Control-Allow-Credentials':true,
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("access_token")
+    };
+
+    const deleteItem = () => {
+        console.log("Starting deleting")
+        axios.delete(`http://localhost:8080/store/certificate/delete?id=${id}`, {
+                idS: id 
+            }, 
+            {headers}
+            )
+        .then(response => {
+            console.log("RESPONSE", response)
+            if(response.status === 200){
+                message("The certificate was deleted successfully!");
+            }
+        })
+        .catch(error => {
+            console.log("error", error)
+            if(error.response.status === 400) {
+                // setError(error.response.data.message);
+            } else {
+                navigate("/error-page-server");
+            }
+        })
+        .finally(() => {
+            status(true);
+            closeModal(false);
+        })
     }
+
+
   return (
     <div className='form-modal-message'>
         <div className='modalBackground'>
         <div className='modalContainer'>
-            <button className='titleCloseBtn' onClick={e => status(false)}>X</button>
+            <button className='titleCloseBtn' onClick={e => closeModal(false)}>X</button>
             <div className='body-model'>
                 <h1>"Are You sure You want to delete item with ID: {id}?"</h1>
             </div>
             <div className='footer-model'>
-                <button onClick={e => status(true)}>Delete</button>
-                <button onClick={e => status(false)} id='cancelBtn'>Cancel</button>
+                <button onClick={deleteItem}>Delete</button>
+                <button onClick={e => closeModal(false)} id='cancelBtn'>Cancel</button>
             </div>
         </div>
     </div>

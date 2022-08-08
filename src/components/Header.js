@@ -10,8 +10,8 @@ export default function Header() {
 
   const Logout = () => {
     console.log("Logout");
-    localStorage.setItem("access_token", "");
-    localStorage.setItem("refresh_token", "");
+    localStorage.setItem("access_token", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2xvZ2luIiwiZXhwIjoxNjU5OTE2Mzc0fQ.YashG68FOaW2yFUJM8fLKhpNg_y8vCgdhWEwsAMF8PE");
+    localStorage.setItem("refresh_token", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBnbWFpbC5jb20iLCJyb2xlcyI6WyJBRE1JTiIsIlVTRVIiXSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2xvZ2luIiwiZXhwIjoxNjU5OTE3NTc0fQ.VXUuYf4syW5cK7qiJoY7VbWx0DlUcvOCYgcICGpAcaE");
   }
 
   return (

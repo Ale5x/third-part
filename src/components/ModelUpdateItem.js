@@ -1,7 +1,9 @@
 import React, {useState, useEffect} from 'react'
+import { useNavigate  } from 'react-router-dom';
 import axios from 'axios'
 
-function ModelUpdateItem({id, closeModal, status}) {
+function ModelUpdateItem({id, closeModal, status, message}) {
+    const navigate = useNavigate();
     const [details, setDetails] = useState({name: "", tags: "", duration: "", description: "",});
 
     const [item, setItem] = useState({giftCertificateDtoId: "", 
@@ -14,6 +16,11 @@ function ModelUpdateItem({id, closeModal, status}) {
                                       description: ""});
     const [fetching, setFetching] = useState(true);
     const [error, setError] = useState("");
+
+    const headers = { 
+      'Content-Type': 'application/json',
+      'Authorization': localStorage.getItem("access_token")
+  };
 
       useEffect(() => {
         if(fetching) {
@@ -40,7 +47,34 @@ function ModelUpdateItem({id, closeModal, status}) {
 
 
     const updateContent = () => {
-        console.log("UPDATE SERTIFICATE", details)
+      axios.post("http://localhost:8080/store/certificate/update", {
+        giftCertificateDtoId: item.giftCertificateDtoId, 
+        name: details.name,
+        tags: details.tags,
+        price: details.price,
+        duration: details.duration,
+        description: details.description
+      }, 
+        {headers}
+      )
+      .then(response => {
+        console.log("response", response)
+        if(response.status === 201){
+          message("The certificate was updated successfully!");
+          closeModal(false);
+        }
+      })
+      .catch(error => {
+        console.log("ERROR", error)
+        if(error.response.status === 400) {
+          setError(error.response.data.message);
+        } else {
+          navigate("/error-page-server");
+        }
+      })
+      .finally(() => {
+        status(true);
+      })
         closeModal(false);
         status(true);
 }
@@ -52,8 +86,16 @@ function ModelUpdateItem({id, closeModal, status}) {
             <div className='title-color'>
                 <p>Update Certificate</p>
             </div>
+            <div className='error-message'>
+                <h3>
+                    {
+                        (error != "") ? (error) : ("")
+                    } 
+                </h3>
+            </div>
             <div className='body-model'>
             <div className='.container-for-update'>
+              <div className='form-group-model'><b>ID:</b>{item.giftCertificateDtoId} </div>
                <div className='form-group-model'>
                     <b>Name:</b>{item.name}
                     <br/>

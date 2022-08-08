@@ -1,5 +1,6 @@
-import React, {useState, useEffect} from 'react'
-import axios from 'axios'
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
+import { useNavigate  } from 'react-router-dom';
 
 function ModelViewItem({id, closeModal}) {
     const [item, setItem] = useState({giftCertificateDtoId: "", 
@@ -12,30 +13,36 @@ function ModelViewItem({id, closeModal}) {
                                       description: ""});
     const [fetching, setFetching] = useState(true);
     const [error, setError] = useState("");
+    const navigate = useNavigate();
 
       useEffect(() => {
-        // if(fetching) {
-        //   axios.get(`http://localhost:8080/store/certificate/get?id=${id}`)
-        //     .then(response => {
-        //       if(response.status == 200) {
-        //         setItem({
-        //           giftCertificateDtoId: response.data.giftCertificateDtoId,
-        //           name: response.data.name,
-        //           tags: response.data.tags,
-        //           duration: response.data.duration,
-        //           createDate: response.data.createDate,
-        //           lastUpdateDate: response.data.lastUpdateDate,
-        //           description: response.data.description
-        //         })
-        //       } else {
-        //         setError("Error message")
-        //       }
-        //   })
-        //     .finally(() => 
-        //       setFetching(false));
-        //  }
-         
-      })
+        
+        axios.get(`http://localhost:8080/store/certificate/get?id=${id}`)
+            .then(response => {
+              if(response.status == 200) {
+                setItem({
+                  giftCertificateDtoId: response.data.giftCertificateDtoId,
+                  name: response.data.name,
+                  tags: response.data.tags,
+                  duration: response.data.duration,
+                  createDate: response.data.createDate,
+                  lastUpdateDate: response.data.lastUpdateDate,
+                  description: response.data.description
+                })
+              } else {
+                setError("Error message")
+              }
+          })
+          .catch(error => {
+            if(error.response.status === 404) {
+                navigate("/error-page-404")
+            }else {
+                navigate("/error-page-server")
+            }
+          })
+          .finally(() => 
+            setFetching(false))
+      }, [fetching]);
       
 
   

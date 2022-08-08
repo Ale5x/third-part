@@ -2,51 +2,61 @@ import React, {useState, useEffect} from 'react'
 import product_card from "../data/data-content";
 import ModelViewItem from "./ModelViewItem"
 import axios from 'axios'
+import { useNavigate  } from 'react-router-dom';
 
 
 
 function MainContent() {
+    let url = '';
+    const navigate = useNavigate();
     const [items, setItems] = useState(product_card._embedded.giftCertificateDtoList);
     const [scrollPositionY, setScrollPositionY] = useState(0);
     const [scrollStatus, setScrollStatus] = useState({top: false, down: false});
     const [openModalViewItem, setOpenModalViewItem] = useState(false);
     const [viewItem, setViewItem] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
-    const [currentPageForName, setCurrentPageForName] = useState(1);
+    const [countItemsInPage, setCountItemsInPage] = useState(9);
+    const [countItemsInServer, setCountItemsInServer] = useState(0);
+    const [countItemsInServerByPartName, setCountItemsInServerByPartName] = useState(0);
     const [fetching, setFetching] = useState(true);
-
+    const [fetchingCountItems, setFetchingCountItems] = useState(true);
+    const [fetchingCountItemsByName, setFetchingCountItemsByName] = useState(false);
     const [nameValue, setSeacrhValue] = useState("");
+    const [loaderStatus, setLoaderStatus] = useState(true);
     
     const searchByName = (e) => {
         setItems([])
         setSeacrhValue(e.target.value);
-        setCurrentPageForName(1);
+        setFetchingCountItemsByName(true);
         setCurrentPage(1);
         setFetching(true)
     }
 
     useEffect(() => {
+        
         if(fetching) {
-        //    if(nameValue !== "") {
-        //     axios.get(`http://localhost:8080/store/certificate/getCertificatesByPartName?size=10&page=${currentPageForName}&name=${nameValue}`)
-        //     .then(response => {
-        //         setItems([...items, ...response.data._embedded.giftCertificateDtoList]);
-        //         currentPageForName(currentPageForName => currentPageForName + 1);
-        //         // setTotalCount(response.headers(['x-total-count']))       
-        //         console.log("LIST EMPTY", response.data._embedded.giftCertificateDtoList)         
-        //     })
-        //     .finally(() => 
-        //     setFetching(false));
-        //    } else {
-        //     axios.get(`http://localhost:8080/store/certificate/getAllCertificates?size=10&page=${currentPage}`)
-        //     .then(response => {
-        //         setItems([...items, ...response.data._embedded.giftCertificateDtoList]);
-        //         setCurrentPage(currentPage => currentPage + 1);
-        //         // setTotalCount(response.headers(['x-total-count']))                
-        //     })
-        //     .finally(() => 
-        //     setFetching(false));
-        //    }
+           if(nameValue !== "") {
+            url = `http://localhost:8080/store/certificate/getCertificatesByPartName?size=${countItemsInPage}&page=${currentPage}&name=${nameValue}`;
+            setCurrentPage(currentPage => currentPage + 1);
+           } else {
+            url = `http://localhost:8080/store/certificate/getAllCertificates?size=${countItemsInPage}&page=${currentPage}`;
+            setCurrentPage(currentPage => currentPage + 1);
+           }
+
+           axios.get(url)
+           .then(response => {
+               setItems([...items, ...response.data._embedded.giftCertificateDtoList]);
+           })
+           .catch(e => {
+               if(e.response.status === 404) {
+                   navigate("/error-page-404")
+               }else {
+                   navigate("/error-page-server")
+               }
+           })
+           .finally(() => {
+           setFetchingCountItems(true);
+           setFetching(false)});
         }
     }, [fetching])
 
@@ -59,7 +69,7 @@ function MainContent() {
 
     const scrollHandler = (e) => {
         //e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100
-        if(window.scrollY < 300) {
+        if(e.target.documentElement.scrollHeight - (e.target.documentElement.scrollTop + window.innerHeight) < 100) {
             setFetching(true);
         }
 
@@ -77,10 +87,60 @@ function MainContent() {
     }
 
     const acctionViewItem = (e) => {
-        setViewItem(e.target.value);
+        setViewItem(e.target.alt);
         setOpenModalViewItem(true);
     }
 
+    useEffect(() => {
+        axios.get('http://localhost:8080/store/certificate/getCountCertificates')
+        .then(response => {
+            setCountItemsInServer(response.data);
+        })
+        .catch(e => {
+            if(e.response.status === 404) {
+                navigate("/error-page-404")
+            }else {
+                navigate("/error-page-server")
+            }
+        })
+        .finally(() => {
+            setFetchingCountItems(false);
+        })
+
+        if((currentPage * countItemsInPage) < countItemsInServer) {
+            setLoaderStatus(true);
+        } else {
+            setLoaderStatus(false);
+        }
+        
+    }, [fetchingCountItems]);
+
+    useEffect(() => {
+        if(nameValue != "") {
+            setFetchingCountItems(true)
+            axios.get(`http://localhost:8080/store/certificate/getCountCertificatesByPartName?size=${countItemsInServer}&name=${nameValue}&page=1`)
+                .then(response => {
+                    setCountItemsInServerByPartName(response.data);
+                })
+                .catch(e => {
+                    if(e.response.status === 404) {
+                        navigate("/error-page-404")
+                    }else {
+                        navigate("/error-page-server")
+                    }
+                })
+                .finally(() => {
+                    setFetchingCountItemsByName(false);
+                })
+
+        if((currentPage * countItemsInPage) < countItemsInServerByPartName) {
+            setLoaderStatus(true);
+        } else {
+            setLoaderStatus(false);
+        }
+        }
+        
+    }, [fetchingCountItemsByName]);
 
   return (
     <div>
@@ -89,42 +149,45 @@ function MainContent() {
                 <div>
                     {openModalViewItem && <ModelViewItem id={viewItem} closeModal={setOpenModalViewItem}/>}
                 </div>
-            <div> 
-        <div className='search-function-main-page'>
-            <input type='search' placeholder='Enter name' onChange={searchByName}></input>
-        </div>
-        <div className='container-content-items'>
-        {items.map(item => 
-            <div className='item-content' key={item.giftCertificateDtoId}>
-                <button onClick={acctionViewItem} value={item.giftCertificateDtoId}>
-                    <img src='https://img.icons8.com/carbon-copy/344/certificate.png' title='Description' alt=''></img>
-                </button>
-            
-                <h3>{item.name}</h3>
-                <h2>Price: {item.price}$</h2>
-                <button className='add-to-cart-btn'>Add to cart</button>
+            <div className='search-function-main-page'>
+                <input type='search' placeholder='Enter name' onChange={searchByName}></input>
             </div>
-            )}
-        </div>
+            <div className='container-content-items'>
+                {items.map(item => 
+                    <div className='item-content' key={item.giftCertificateDtoId}>
+                        <button>
+                            <img src='https://img.icons8.com/carbon-copy/344/certificate.png' title='Description' alt={item.giftCertificateDtoId} onClick={acctionViewItem}></img>
+                        </button>
+                    
+                        <h3>{item.name}</h3>
+                        <h2>Price: {item.price}$</h2>
+                        <button className='add-to-cart-btn'>Add to cart</button>
+                    </div>
+                    )}
             </div>
-           
         </div> 
-        </div>
-        <div>
-           {(window.scrollY > 200) ? (
+    </div>
+    <div className='loader'>
+        {(loaderStatus) ? (
+            <img src='https://i.gifer.com/ZZ5H.gif'></img>  
+        ) : ("")}
+        
+    </div>
+    <div>
+       {(window.scrollY > 200) ? (
             <div className='scrollTop'>
                 <img src='https://img.icons8.com/ios-filled/344/long-arrow-up.png' title='Up' class="scrollTop" alt='' onClick={scrollTop}></img>
              </div>
            ) : ("")}
-        </div>
-        <div>
-           {(window.scrollY < 200 && scrollPositionY !== 0) ? (
+    </div>
+    <div>
+        {(window.scrollY < 200 && scrollPositionY !== 0) ? (
            <div className='scrollBack'>
                 <img src='https://img.icons8.com/ios-filled/344/long-arrow-down.png' title='Down' class="scrollBack" alt='' onClick={scrollBack}></img>
             </div>
            ) : ("")}
-        </div>
     </div>
+</div>
   )
 }
 

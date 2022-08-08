@@ -90,11 +90,25 @@
     box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.2);
 }
 
-.btn {
+.btn, .cancel-btn {
     color: white;
     background-color: black;
     height: 40px;
     border-radius: 15px;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background-color: rgba(214, 13, 13, .8);
+    margin-left: 0;
+    border-radius: 5px;
+    padding: 5px;
+}
+.position-btn {
+    display: flex;
+    align-items: center;
+
+    justify-content: space-between;
 }
 
 .welcome {
@@ -118,7 +132,7 @@
 
 .error_message {
     color: red;
-    font-size: 18px;
+    font-size: 25px;
 }
 
 .position-centr {

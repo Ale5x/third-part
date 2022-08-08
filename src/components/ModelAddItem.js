@@ -1,10 +1,44 @@
 import React, {useState} from 'react'
+import { useNavigate  } from 'react-router-dom';
+import axios from 'axios';
 
-function ModelAddItem({closeModal, error}) {
-    const [details, setDetails] = useState({name: "", tags: "", duration: "", description: "",});
+function ModelAddItem({closeModal, message, status}) {
+    const navigate = useNavigate();
+    const [error, setError] = useState("");
+    const [details, setDetails] = useState({name: "", tags: "", duration: "", price: "", description: "",});
+
+    const headers = { 
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("access_token")
+    };
 
     const addContent = () => {
-            console.log("NEW SERTIFICATE", details)
+        axios.post("http://localhost:8080/store/certificate/create", {
+                
+                    name: details.name,
+                    tags: details.tags,
+                    price: details.price,
+                    duration: details.duration,
+                    description: details.description
+            }, 
+            {headers}
+            )
+        .then(response => {
+            if(response.status === 201){
+                message("The certificate was created successfully!");
+                closeModal(false);
+            }
+        })
+        .catch(error => {
+            if(error.response.status === 400) {
+                setError(error.response.data.message);
+            } else {
+                navigate("/error-page-server");
+            }
+        })
+        .finally(() => {
+            status(true);
+        })
     }
 
 
@@ -15,11 +49,23 @@ function ModelAddItem({closeModal, error}) {
             <div className='title-color'>
                 <p>Add new Certificate</p>
             </div>
+            <div className='error-message'>
+                <h3>
+                    {
+                        (error != "") ? (error) : ("")
+                    } 
+                </h3>
+            </div>
             <div className='body-model'>
                <div className='form-group-model'>
                     <b>Name:</b>
                     <br/>
                     <input type="text" name="name" id="name" onChange={e => setDetails({...details, name: e.target.value})} value={details.name}></input>
+               </div>
+               <div className='form-group-model'>
+                    <b>Price: </b>
+                    <br/>
+                    <input type="number" name="price" id="price" onChange={e => setDetails({...details, price: e.target.value})} value={details.price} min='0.1' max="99999"></input>
                </div>
                <div className='form-group-model'>
                     <b>Tags:</b>
@@ -29,7 +75,7 @@ function ModelAddItem({closeModal, error}) {
                <div className='form-group-model'>
                     <b>Duration: </b>
                     <br/>
-                    <input type="number" name="duration" id="duration" onChange={e => setDetails({...details, duration: e.target.value})} value={details.duration}></input>
+                    <input type="number" name="duration" id="duration" onChange={e => setDetails({...details, duration: e.target.value})} value={details.duration} min='1' max='365'></input>
                </div>
                <div className='form-group-model'>
                     <b>Description:</b>
