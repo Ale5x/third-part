@@ -96,6 +96,7 @@ function ModelUpdateItem({id, closeModal, status, message}) {
             <div className='body-model'>
             <div className='.container-for-update'>
               <div className='form-group-model'><b>ID:</b>{item.giftCertificateDtoId} </div>
+              <hr/>
                <div className='form-group-model'>
                     <b>Name:</b>{item.name}
                     <br/>
@@ -104,6 +105,7 @@ function ModelUpdateItem({id, closeModal, status, message}) {
                         <input type="text" name="name" id="name" onChange={e => setDetails({...details, name: e.target.value})} value={details.name}></input>
                     </span>
                </div>
+               <hr/>
                <div className='form-group-model'>
                     <b>Tags:</b> {item.tags}
                     <br/>
@@ -113,6 +115,7 @@ function ModelUpdateItem({id, closeModal, status, message}) {
                     </span>
                     
                </div>
+               <hr/>
                <div className='form-group-model'>
                     <b>Price:</b>{item.price}
                     <br/>
@@ -122,15 +125,17 @@ function ModelUpdateItem({id, closeModal, status, message}) {
                     </span>
                     
                </div>
+               <hr/>
                <div className='form-group-model'>
                     <b>Duration: </b>{item.duration}
                     <br/>
                     <span>
                         <b>New value:</b>
-                        <input type="number" min='1' name="duration" id="duration" onChange={e => setDetails({...details, duration: e.target.value})} value={details.duration}></input>
+                        <input type="number" min="1" name="duration" id="duration" onChange={e => setDetails({...details, duration: e.target.value})} value={details.duration}></input>
                     </span>
                     
                </div>
+               <hr/>
                <div className='form-group-model'>
                     <b>Description:</b>{item.description}
                     <br/>

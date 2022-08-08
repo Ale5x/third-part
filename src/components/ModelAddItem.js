@@ -65,7 +65,7 @@ function ModelAddItem({closeModal, message, status}) {
                <div className='form-group-model'>
                     <b>Price: </b>
                     <br/>
-                    <input type="number" name="price" id="price" onChange={e => setDetails({...details, price: e.target.value})} value={details.price} min='0.1' max="99999"></input>
+                    <input type="number" name="price" id="price" onChange={e => setDetails({...details, price: e.target.value})} value={details.price} min="0.1" max="99999"></input>
                </div>
                <div className='form-group-model'>
                     <b>Tags:</b>
@@ -75,7 +75,7 @@ function ModelAddItem({closeModal, message, status}) {
                <div className='form-group-model'>
                     <b>Duration: </b>
                     <br/>
-                    <input type="number" name="duration" id="duration" onChange={e => setDetails({...details, duration: e.target.value})} value={details.duration} min='1' max='365'></input>
+                    <input type="number" name="duration" id="duration" onChange={e => setDetails({...details, duration: e.target.value})} value={details.duration} min="1" max="365"></input>
                </div>
                <div className='form-group-model'>
                     <b>Description:</b>
