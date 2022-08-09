@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import ModelRegistration from './ModelRegistration';
+import ModelRegistration from './ModalWindow/ModelRegistration';
 import { useNavigate  } from 'react-router-dom';
 import axios from 'axios';
 

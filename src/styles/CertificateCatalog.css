@@ -196,7 +196,7 @@ table {
     border-radius: 3px;
     transition: 0.2s;
     margin: 3px;
-    background: #000;
+    background: grey;
     will-change: transform;
     transform-origin: center center;
     cursor: pointer;

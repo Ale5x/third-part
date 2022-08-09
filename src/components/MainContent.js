@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import product_card from "../data/data-content";
-import ModelViewItem from "./ModelViewItem"
+import ModelViewItem from "./ModalWindow/ModelViewItem"
 import axios from 'axios'
 import { useNavigate  } from 'react-router-dom';
 
@@ -24,6 +24,11 @@ function MainContent() {
     const [nameValue, setSeacrhValue] = useState("");
     const [loaderStatus, setLoaderStatus] = useState(true);
     
+    if(!window.location.hash) {
+        window.location = window.location + '#loaded';
+        window.location.reload();
+      }
+      
     const searchByName = (e) => {
         setItems([])
         setSeacrhValue(e.target.value);

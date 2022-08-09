@@ -13,11 +13,13 @@ import CertificatreCatalog from './components/CertificatreCatalog';
 import MainContent from './components/MainContent'
 import Header from './components/Header'
 import Footer from './components/Footer'
-import ErrorPage from './components/ErrorServer'
-import ErrorPage404 from './components/Error404'
+import ErrorPage from './components/Error/ErrorServer'
+import ErrorPage404 from './components/Error/Error404'
+import Error403 from './components/Error/Error403'
 import AdminHeader from './components/AdminHeader'
 
 import Test from './components/Test'
+import Test2 from './components/Test2'
 import TestModel from './components/TestModel'
 
 import React, {useState, useEffect} from 'react'
@@ -25,35 +27,38 @@ import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 
 
 function App() {
-  
-  const [reloadStatus, setReloadStatus] = useState(true);
-  
-  useEffect(() => {
-    // window.location.reload();
-    setReloadStatus(false);
-  }, [reloadStatus])
+
   return (
     <div>
-      {/* <Router>
-        <Header/>
+      <Router>
+        {(localStorage.getItem("roles") === "[ADMIN]") ?
+         (<AdminHeader/>) : (<Header/>)}
+        
         <Routes>
-          <Route path='t' element={<Test/>}/>
-          <Route path='tm' 
-                    render={() => <TestModel/>}
-          // element={<TestModel/>}
-          />
+
+        <Route path='*' element={<ErrorPage404/>}/>
+
+
+
+          <Route path='test' element={<Test/>}/>
+          <Route path='test2' element={<Test2/>}/>
+          {/* <Route path='tm' 
+                    render={() => <TestModel/>} */}
+          {/* // element={<TestModel/>}
+          /> */}
           <Route path='tt' element={<TestModel/>}/>
+          <Route path='error' element={<Error403/>}/>
 
 
-          <Route path='/' element={<MainContent/>}/>
+          <Route path='/' element={<Test/>}/>
           <Route path='error-page-server' element={<ErrorPage/>}/>
           <Route path='error-page-404' element={<ErrorPage404/>}/>
           <Route path='certificate-catalog' element={<CertificatreCatalog/>}/>
         </Routes>
-      </Router> */}
+      </Router>
 
 
-      <Router>
+      {/* <Router>
         {(localStorage.getItem("roles") === "[ADMIN]") ?
          (<AdminHeader/>) : (<Header/>)}
         
@@ -67,7 +72,7 @@ function App() {
           <Route path='certificate-catalog' element={<CertificatreCatalog/>}/>
         </Routes> 
         <Footer/>
-      </Router>
+      </Router> */}
     </div>
     
   );

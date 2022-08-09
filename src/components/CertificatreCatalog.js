@@ -1,9 +1,9 @@
 import React, {useState, useEffect}  from 'react'
 import axios from 'axios'
-import ModalMessage from './ModalMessage'
-import ModelViewItem from './ModelViewItem';
-import ModelAddItem from './ModelAddItem';
-import ModelUpdateItem from './ModelUpdateItem';
+import ModalMessage from './ModalWindow/ModalMessage'
+import ModelViewItem from './ModalWindow/ModelViewItem';
+import ModelAddItem from './ModalWindow/ModelAddItem';
+import ModelUpdateItem from './ModalWindow/ModelUpdateItem';
 import product_card from "../data/data-content";
 import { useNavigate  } from 'react-router-dom';
 
