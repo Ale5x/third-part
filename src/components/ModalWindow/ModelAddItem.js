@@ -32,9 +32,11 @@ function ModelAddItem({closeModal, message, status}) {
         .catch(error => {
             if(error.response.status === 400) {
                 setError(error.response.data.message);
-            } else {
-                navigate("/error-page-server");
-            }
+            } else if(error.response.status === 403) {
+                navigate("/error-page-403")
+              } else {
+                navigate("/error-page-server")
+              }
         })
         .finally(() => {
             status(true);

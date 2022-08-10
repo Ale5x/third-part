@@ -202,6 +202,9 @@ table {
     cursor: pointer;
 } 
 
+.btn-navigation img {
+    width: 30px;
+}
 .btn-navigation:hover{
     transform: scale(1.2);
 }

@@ -66,10 +66,12 @@ function ModelUpdateItem({id, closeModal, status, message}) {
       .catch(error => {
         if(error.response.status === 400) {
           setError(error.response.data.message);
+        } else if(error.response.status === 403) {
+          navigate("/error-page-403")
         } else {
-          navigate("/error-page-server");
+          navigate("/error-page-server")
         }
-      })
+        })
       .finally(() => {
         status(true);
       })
@@ -78,8 +80,8 @@ function ModelUpdateItem({id, closeModal, status, message}) {
 }
 
   return (
-    <div className='modalBackground'>
-        <div className='modalContainer'>
+    <div className='modalBackground-update'>
+        <div className='modalContainer-update'>
             <div className='form-modal-edit'>
             <div className='title-color'>
                 <p>Update Certificate</p>
@@ -154,7 +156,7 @@ function ModelUpdateItem({id, closeModal, status, message}) {
             <div>
                 <span className='footer-for-padding'></span>
             </div>
-        </div>
+            </div>
     </div>
   )
   

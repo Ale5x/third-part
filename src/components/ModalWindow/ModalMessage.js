@@ -27,9 +27,11 @@ function ModalMessage({message, closeModal, id, status}) {
             if(error.response.status === 400) {
                 message(`Error while deleting certificate ID:${id}` + error.response.data.message);
                 // setError(error.response.data.message);
-            } else {
-                navigate("/error-page-server");
-            }
+            } else if(error.response.status === 403) {
+                navigate("/error-page-403")
+              } else {
+                navigate("/error-page-server")
+              }
         })
         .finally(() => {
             status(true);

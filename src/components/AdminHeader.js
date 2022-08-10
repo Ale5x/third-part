@@ -4,19 +4,16 @@ import { useNavigate  } from 'react-router-dom';
 function AdminHeader() {
     const navigate = useNavigate();
 
-    console.log("LOOK", localStorage.getItem("access_token"))
+    console.log(localStorage.getItem("access_token"))
 
     const Logout = () => {
-        console.log("Logout");
         localStorage.clear();
-        console.log("LOOK AFTER CLEAR", localStorage.getItem("access_token"))
-        window.location.reload();
+        navigate("/");
       }
 
   return (
     <div className='header'>
         
-   
         <nav className='header-content'>
           <div className='logo'> Store...</div>
           <ui>

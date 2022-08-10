@@ -4,7 +4,6 @@ import ModalMessage from './ModalWindow/ModalMessage'
 import ModelViewItem from './ModalWindow/ModelViewItem';
 import ModelAddItem from './ModalWindow/ModelAddItem';
 import ModelUpdateItem from './ModalWindow/ModelUpdateItem';
-import product_card from "../data/data-content";
 import { useNavigate  } from 'react-router-dom';
 
 
@@ -13,40 +12,31 @@ import { useNavigate  } from 'react-router-dom';
 function CertificatreCatalog() {
     let url = "";
     const navigate = useNavigate();
-    const [urlCertificateLocal, setUrlCertificateLocal] = useState("");
     const [items, setItems] = useState([]);
+    const [nextPage, setNextPage] = useState("");
+    const [prevPage, setPrevPage] = useState("");
     const [viewItem, setViewItem] = useState(0);
     const [editItem, setEditItem] = useState(0);
     const [openModalDelete, setOpenModalDelete] = useState(false);
     const [openModalViewItem, setOpenModalViewItem] = useState(false);
     const [openModalEditItem, setOpenModalEditItem] = useState(false);
     const [openModalAddItem, setOpenModalAddItem] = useState(false);
-    const [lastPage, setLastPage] = useState(50);
-    const [dispatch, setDispatch] = useState();
+
     const [typeStatus, setTypeStatus] = useState({typeDefault: true, typeSortDate: false, typeReverseSortDate: false})
     const [countItemsInServer, setCountItemsInServer] = useState(0);
     const [countItemsInServerByPartName, setCountItemsInServerByPartName] = useState(0);
     const [id, setId] = useState(0);
-    const pages = [1, 2, 3, 4, 5];
     const [message, setMessage] = useState("");
-    let initUrl = "";
-    // const [countItems, setCountItems] = useState((sessionStorage.getItem('countItems') === null) ? 10 : sessionStorage.getItem('countItems'))
-    const [countItems, setCountItems] = useState(10);
-    const [defaultCountItems, setDefaultCountItems] = useState(10)
+    const [countItems, setCountItems] = useState(((localStorage.getItem("countCertificateLocal") === null) ? (10) : (localStorage.getItem("countCertificateLocal"))));
     const [fetching, setFetching] = useState(true);
     const [fetchingCountItems, setFetchingCountItems] = useState(true);
     const [fetchingCountItemsByName, setFetchingCountItemsByName] = useState(false);
     const [nameValue, setSeacrhValue] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
-    const [currentPageForName, setCurrentPageForName] = useState(1);
-    let defUrl = `http://localhost:8080/store/certificate/getAllCertificates?size=${countItems}&page=${currentPage}`
-    const [defaultUrl, setDefaultUrl] = useState(defUrl);
-    // const [url, setUrl] = useState("")
-    const [loaderStatus, setLoaderStatus] = useState(true);
 
     const headers = { 
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + localStorage.getItem("access_token")
+        'Authorization': localStorage.getItem("access_token")
     };
 
     const typeOutputItems = () => {
@@ -55,18 +45,24 @@ function CertificatreCatalog() {
         setItems([]);
         switch(select.options[select.selectedIndex].value) {
             case "certificates":
+                localStorage.setItem("typeCertificateLocal", "certificates");
                 setTypeStatus({...typeStatus, typeReverseSortDate: false, typeDefault: true, typeSortDate: false});
                 break;
             case "date_reverse":
+                localStorage.setItem("typeCertificateLocal", "date_reverse");
                 setTypeStatus({...typeStatus, typeReverseSortDate: true, typeDefault: false, typeSortDate: false});
                 break;
             case "date":
+                localStorage.setItem("typeCertificateLocal", "date");
                 setTypeStatus({...typeStatus, typeReverseSortDate: false, typeDefault: false, typeSortDate: true});
                 break;
             default:
+                localStorage.setItem("typeCertificateLocal", "certificates");
                 setTypeStatus({...typeStatus, typeReverseSortDate: false, typeDefault: true, typeSortDate: false});
                 break;
         }
+        localStorage.removeItem("urlCertificateLocal");
+        localStorage.removeItem("pageCertificateLocal")
         setFetching(true)
     }
 
@@ -75,38 +71,26 @@ function CertificatreCatalog() {
         sessionStorage.setItem('countItems', select.options[select.selectedIndex].value);
         switch(select.options[select.selectedIndex].value) {
             case "count-10":
-                console.log("count-10");
+                localStorage.setItem("countCertificateLocal", 10);
                 setCountItems(10);
                 break;
             case "count-50":
-                console.log("count-50");
+                localStorage.setItem("countCertificateLocal", 50);
                 setCountItems(50);
                 break;
             case "count-100":
-                console.log("count-100");
+                localStorage.setItem("countCertificateLocal", 100);
                 setCountItems(100);
                 break;
             default:
                 setCountItems(10);
         }
+        localStorage.setItem("countCertificateLocal", countItems);
+        localStorage.removeItem("urlCertificateLocal");
+        localStorage.removeItem("pageCertificateLocal");
         setFetchingCountItems(true);
         setFetchingCountItemsByName(true);
 
-        if(nameValue != ""){
-            if((countItems * currentPage) < countItemsInServerByPartName) {
-                setCurrentPage(1);
-            }
-        } else{
-            if((countItems * currentPage) < countItemsInServer) {
-                
-                setCurrentPage(1);
-            }
-        }
-        console.log("(countItems * currentPage) > countItemsInServer -------", (countItems * currentPage) > countItemsInServer);
-        console.log("(countItems * currentPage)", (countItems * currentPage));
-        console.log("countItemsInServer", countItemsInServer);
-        console.log("setCountItems", countItems);
-        console.log("CURRENT PAGE", currentPage);
         setFetching(true)
     }
 
@@ -114,8 +98,8 @@ function CertificatreCatalog() {
     const searchByName = (e) => {
         setItems([])
         setSeacrhValue(e.target.value);
-        setCurrentPageForName(1);
-        setCurrentPage(1);
+        localStorage.removeItem("urlCertificateLocal");
+        localStorage.setItem("pageCertificateLocal", 1);
         setFetching(true)
     }
 
@@ -123,12 +107,9 @@ function CertificatreCatalog() {
         setId(e.target.value)
         setOpenModalDelete(true)
         setFetching(true);
-        console.log("acctionDelete id value", e.target.value);
-        
     }
 
     const acctionViewItem = (e) => {
-        console.log("ITEM ID", e);
         setViewItem(e.target.value);
         setOpenModalViewItem(true);
     }
@@ -139,75 +120,102 @@ function CertificatreCatalog() {
     }
 
     const navigationNextPage = () => {
-        if(currentPage * countItems <= countItemsInServer) {
-            console.log("CURRENT PAGE", currentPage + 1)
-            setCurrentPage(currentPage => currentPage + 1);
+        url = nextPage;
+        localStorage.setItem("urlCertificateLocal", url);
+
+        let changePage = currentPage;
+        changePage++;
+        setCurrentPage(changePage);
+        localStorage.setItem("pageCertificateLocal", changePage);
+        window.scrollTo(0,0);
         setFetching(true);
-        }
-        
     }
 
     const navigationPrevPage = () => {
-        if(currentPage > 1) {
-            setCurrentPage(currentPage => currentPage - 1);
-            setFetching(true);
+        url = prevPage;
+        localStorage.setItem("urlCertificateLocal", url);
+
+        let changePage = currentPage;
+        changePage--;
+        if(changePage  <= 0) {
+            changePage = 1;
         }
+        setCurrentPage(changePage);
+        localStorage.setItem("pageCertificateLocal", changePage);
+        window.scrollTo(0,0);
+        setFetching(true);
     }
 
-    const jumpPage = (e) => {
-        let countCertificates = 1;
-        setFetchingCountItems(true);
-        setFetchingCountItemsByName(true);
-        if(e.target.value != "") {
-            if(nameValue !== "") {
-                countCertificates = countItemsInServerByPartName;
-            } else {
-                countCertificates = countItemsInServer;
-            }
-        }
-   
-        if(e.target.value * countItems < countCertificates) {
-            setCurrentPage(e.target.value);
-        } else {
-            let page = 1;
-            while((page * countItems) <= countCertificates) {
+    const startPage = () => {
+        localStorage.setItem("pageCertificateLocal", 1);
+        setCurrentPage(1);
+        localStorage.removeItem("urlCertificateLocal");
+        window.scrollTo(0,0);
+        setFetching(true);
+    }
+
+    const lastPage = () => {
+        let page = 1;
+        if(nameValue !== "") {
+            while((page * countItems) <= countItemsInServerByPartName) {
                 page++;
             }
-            page--;
-            setCurrentPage(page);
+        } else {
+            while((page * countItems) <= countItemsInServer) {
+                page++;
+            }
         }
-        
+        localStorage.setItem("pageCertificateLocal", page);
+        setCurrentPage(page);
+        localStorage.removeItem("urlCertificateLocal");
+        window.scrollTo(0,0);
         setFetching(true);
     }
 
     useEffect(() => {
         if(fetching) {
-           if(nameValue !== "") {
-            axios.get(`http://localhost:8080/store/certificate/getCertificatesByPartName?size=10&page=${currentPage}&name=${nameValue}`)
-            .then(response => {
-                setItems([...response.data._embedded.giftCertificateDtoList]);
-            })
-            .finally(() => 
-            setFetching(false));
-           } else {
-           
-            if(typeStatus.typeSortDate) {
-                url = `http://localhost:8080/store/certificate/allSortDate?size=${countItems}&page=${currentPage}`;
-            } else if(typeStatus.typeReverseSortDate) {
-                url = `http://localhost:8080/store/certificate/allSortReverseDate?size=${countItems}&page=${currentPage}`;
+            setCurrentPage(((localStorage.getItem("pageCertificateLocal") === null) ? (1) : (localStorage.getItem("pageCertificateLocal"))))
+            if(localStorage.getItem("urlCertificateLocal") === null || localStorage.getItem("urlCertificateLocal") === "") {
+                if(nameValue !== "") {
+                    url = `http://localhost:8080/store/certificate/getCertificatesByPartName?size=${countItems}&page=${currentPage}&name=${nameValue}`;
+                    localStorage.setItem("urlCertificateLocal", url);
+                } else if(localStorage.getItem("typeCertificateLocal") === "date") {
+                    url = `http://localhost:8080/store/certificate/allSortDate?size=${countItems}&page=${currentPage}`;
+                    localStorage.setItem("urlCertificateLocal", url);
+                } else if(localStorage.getItem("typeCertificateLocal") === "date_reverse") {
+                    url = `http://localhost:8080/store/certificate/allSortReverseDate?size=${countItems}&page=${currentPage}`;
+                    localStorage.setItem("urlCertificateLocal", url);
+                } else {
+                    url = `http://localhost:8080/store/certificate/getAllCertificates?size=${countItems}&page=${currentPage}`;
+                    localStorage.setItem("urlCertificateLocal", url);
+                }
             } else {
-                url = `http://localhost:8080/store/certificate/getAllCertificates?size=${countItems}&page=${currentPage}`;
+                url = localStorage.getItem("urlCertificateLocal");
             }
-            console.log("TYPESTATUS", typeStatus)
+            
             localStorage.setItem("urlCertificateLocal", url);
-            console.log("URL FROM LOCAL STORED", localStorage.getItem("urlCertificateLocal"))
+
             axios.get(url, {headers})
             .then(response => {
+                if(response.data._embedded === undefined) {
+                    localStorage.setItem("pageCertificateLocal", (localStorage.getItem("pageCertificateLocal") - 1));
+                    setCurrentPage(localStorage.getItem("pageCertificateLocal"));
+                }
                 setItems([...response.data._embedded.giftCertificateDtoList]);
+                setNextPage(response.data._links.Next.href);
+                setPrevPage(response.data._links.Previous.href);
             })
+            .catch(error => {
+                if(error.response.status === 404) {
+                    navigate("/error-page-404")
+                } else if(error.response.status === 403) {
+                  navigate("/error-page-403")
+                } else {
+                  navigate("/error-page-server")
+                }
+                })
             .finally(() => 
             setFetching(false));
-           }
         }
     }, [fetching])
 
@@ -219,22 +227,17 @@ function CertificatreCatalog() {
                     setCountItemsInServerByPartName(response.data);
                 })
                 .catch(e => {
-                    console.log("ERRORRRR", e)
                     if(e.response.status === 404) {
                         navigate("/error-page-404")
-                    }else {
+                    } else if(e.response.status === 403) {
+                        navigate("/error-page-403")
+                    } else {
                         navigate("/error-page-server")
                     }
                 })
                 .finally(() => {
                     setFetchingCountItemsByName(false);
                 })
-
-        if((currentPage * countItems) < countItemsInServerByPartName) {
-            setLoaderStatus(true);
-        } else {
-            setLoaderStatus(false);
-        }
         }
         
     }, [fetchingCountItemsByName]);
@@ -247,20 +250,15 @@ function CertificatreCatalog() {
         .catch(e => {
             if(e.response.status === 404) {
                 navigate("/error-page-404")
-            }else {
+            } else if(e.response.status === 403) {
+                navigate("/error-page-403")
+            } else {
                 navigate("/error-page-server")
             }
         })
         .finally(() => {
             setFetchingCountItems(false);
         })
-
-        if((currentPage * countItems) < countItemsInServer) {
-            setLoaderStatus(true);
-        } else {
-            setLoaderStatus(false);
-        }
-        
     }, [fetchingCountItems]);
 
   return (
@@ -341,19 +339,29 @@ function CertificatreCatalog() {
             <div className='pages'>
                 <span>
                     <span className='settings-span'>
-                        <button className='btn-navigation' onClick={navigationPrevPage}>Prev</button>
+                        <button className='btn-navigation' onClick={startPage}>
+                            <img src='https://cdn-icons-png.flaticon.com/512/44/44887.png'></img>
+                        </button>
+                    </span>
+                    <span className='settings-span'>
+                        <button className='btn-navigation' onClick={navigationPrevPage}>
+                            <img src='https://cdn-icons-png.flaticon.com/512/271/271220.png'></img>
+                        </button>
                     </span>
                     <span className='current-page'>
                             {currentPage}
                     </span>
                     <span className='settings-span'>
-                        <button className='btn-navigation' onClick={navigationNextPage}>Next</button>
+                        <button className='btn-navigation' onClick={navigationNextPage}>
+                            <img src='https://cdn-icons-png.flaticon.com/512/271/271228.png'></img>
+                        </button>
+                    </span>
+                    <span className='settings-span'>
+                        <button className='btn-navigation' onClick={lastPage}>
+                            <img src='https://cdn-icons-png.flaticon.com/512/724/724927.png'></img>
+                        </button>
                     </span>
                 </span>
-            </div>
-            <div className='jump-page'>
-                <span>Jump page</span>
-                <input type="number" min="1" onChange={jumpPage}></input>
             </div>
         </div>
     </div>
@@ -362,10 +370,3 @@ function CertificatreCatalog() {
 }
 
 export default CertificatreCatalog
-
-{/* <button key={index} className={currentPage == page ? 'current-page' : 'page'} 
-                onClick={changePage(page)}>{page}</button>
-                ) */}
-
-
-                

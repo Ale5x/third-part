@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react'
-import product_card from "../data/data-content";
 import ModelViewItem from "./ModalWindow/ModelViewItem"
 import axios from 'axios'
 import { useNavigate  } from 'react-router-dom';
@@ -9,7 +8,7 @@ import { useNavigate  } from 'react-router-dom';
 function MainContent() {
     let url = '';
     const navigate = useNavigate();
-    const [items, setItems] = useState(product_card._embedded.giftCertificateDtoList);
+    const [items, setItems] = useState([]);
     const [scrollPositionY, setScrollPositionY] = useState(0);
     const [scrollStatus, setScrollStatus] = useState({top: false, down: false});
     const [openModalViewItem, setOpenModalViewItem] = useState(false);

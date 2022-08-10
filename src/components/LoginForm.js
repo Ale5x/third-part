@@ -21,26 +21,16 @@ import { useNavigate  } from 'react-router-dom';
             {headers})
             .then(response  => {
                if(response.status === 200){
-                    localStorage.setItem("access_token", response.data.access_token)
-                    localStorage.setItem("refresh_token", response.data.refresh_token)
+                    localStorage.setItem("access_token", "Bearer " + response.data.access_token)
+                    localStorage.setItem("refresh_token", "Bearer " + response.data.refresh_token)
                     localStorage.setItem("roles", response.data.roles)
-                    
+                    console.log("localStorage.setItem(roles", localStorage.getItem("roles"));
                     navigate("/");
                 }
             }
             )
         .catch((e) => {
-            console.log("ERROR FOR e", e)
-            axios.get(`http://localhost:8080/store/user/existUser?email=${details.useremail}`)
-                .then(response => {
-                    if(response.status === 200) {
-                        setError("Invalid password.")
-                    }
-                })
-                .catch(error => {
-                    console.log("ERROR FOR LOGIN", error)
-                    setError("User not found.")
-                })
+            setError("Invalid password or email.")
         })
     }
 

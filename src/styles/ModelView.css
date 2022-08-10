@@ -11,7 +11,34 @@
     z-index: 2;
     
     overflow:scroll;
-    /* scroll-behavior: smooth; */
+}
+
+.modalBackground-update {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    
+}
+
+
+
+.modalContainer-update {
+    overflow: auto;
+    height: 100%;
+    width: 100%;
+    border-radius: 12px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    align-items: center;
 }
  
 .modalContainer {
@@ -70,6 +97,18 @@
 }
 
 .modalContainer .footer-model button {
+    width: 150px;
+    height: 45px;
+    margin: 10px;
+    border: none;
+    background-color: cornflowerblue;
+    color: white;
+    border-radius: 8px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.modalBackground-update .footer-model button {
     width: 150px;
     height: 45px;
     margin: 10px;
